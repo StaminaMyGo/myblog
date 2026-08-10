@@ -26,7 +26,7 @@ $ cat ~/interests.txt
 
 | 渠道 | 地址 |
 | ---- | ---- |
-| GitHub | [github.com/message163](https://github.com/message163) |
-| 博客仓库 | [github.com/message163/myblog](https://github.com/message163/myblog) |
+| GitHub | [github.com/StaminaMyGo](https://github.com/StaminaMyGo) |
+| 博客仓库 | [github.com/StaminaMyGo/myblog](https://github.com/StaminaMyGo/myblog) |
 
 > 如果内容对你有帮助，欢迎在仓库点个 Star ⭐

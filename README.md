@@ -67,7 +67,7 @@ tags: [标签1, 标签2]
 
 ## 部署
 
-1. 将本仓库推送到 GitHub（例如 `message163/myblog`）；
+1. 将本仓库推送到 GitHub（例如 `StaminaMyGo/myblog`）；
 2. 仓库 **Settings → Pages**，Source 选择 **GitHub Actions**；
 3. 之后每次 push 到 `main`，Actions 自动构建并发布到
    `https://<用户名>.github.io/myblog/`。
@@ -76,7 +76,7 @@ tags: [标签1, 标签2]
 
 ## 与 ACGN_Page 的关系
 
-如果你同时维护 [ACGN_Page](https://github.com/message163/ACGN_Page)
+如果你同时维护 [ACGN_Page](https://github.com/StaminaMyGo/ACGN_Page)
 （FastAPI + React 的动态站），两者可以这样分工：
 
 - **myblog**：静态内容站（技术/ACGN/时事），零成本、自动部署；
