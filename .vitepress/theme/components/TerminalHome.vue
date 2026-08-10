@@ -31,7 +31,7 @@ const cats = [
         <p class="term-line">
           <span class="term-prompt">$ </span><span class="term-cmd">whoami</span>
         </p>
-        <p class="term-line"><span class="term-out">message163 — 全栈学习者 / ACGN 爱好者</span></p>
+        <p class="term-line"><span class="term-out">LyY — 全栈学习者 / ACGN 爱好者</span></p>
         <p class="term-line">
           <span class="term-prompt">$ </span><span class="term-cmd">ls categories/</span>
         </p>

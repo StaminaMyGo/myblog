@@ -1,4 +1,4 @@
-﻿---
+---
 title: VitePress 架构笔记：它到底是怎么工作的
 description: 拆解 VitePress 的构建流程、主题机制与内容加载方式。
 date: 2026-08-09
@@ -88,3 +88,19 @@ export default createContentLoader(['tech/**/*.md', 'acgn/**/*.md', 'news/**/*.m
 | 部署产物 | 纯静态 HTML/CSS/JS |
 
 > 一个 SSG 的核心就三件事：**读 Markdown → 渲染页面 → 输出静态文件**。
+
+
+## 构建流程（Mermaid）
+
+```mermaid
+flowchart LR
+    A[编写 .md 源码] --> B[vitepress build]
+    B --> C[Shiki 代码高亮]
+    B --> D[渲染 Vue 组件]
+    C --> E[生成静态 HTML]
+    D --> E
+    E --> F[.vitepress/dist]
+    F --> G[GitHub Actions 上传]
+    G --> H[GitHub Pages CDN]
+    H --> I[用户访问]
+```

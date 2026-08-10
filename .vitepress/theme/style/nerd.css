@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    myblog · nerd.css
    编辑器经典风格（VS Code / 终端 混合美学）
    ========================================================= */
@@ -453,4 +453,22 @@ a {
 @media (max-width: 640px) {
   body { font-size: 14px; }
   .term-body { font-size: 12.5px; padding: 14px; }
+}
+
+/* ---------- 阅读进度条（编辑器风格） ---------- */
+.mb-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 1000;
+  pointer-events: none;
+  background: rgba(152, 195, 121, 0.12);
+}
+.mb-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--mb-green), var(--mb-cyan));
+  box-shadow: 0 0 8px rgba(152, 195, 121, 0.7);
+  transition: width 0.1s linear;
 }

@@ -1,9 +1,10 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
 // 部署时由 GitHub Actions 注入（如 /myblog/），本地开发默认 '/'（根路径）
 const base = process.env.BASE_PATH || '/'
 
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: 'myblog',
   description: '一个 Nerd 风的个人博客：技术项 / ACGN 项 / 时事热点',
   lang: 'zh-CN',
@@ -75,7 +76,7 @@ export default defineConfig({
       provider: 'local',
       options: { translations: { button: { buttonText: '搜索', buttonAriaLabel: '搜索' } } },
     },
-    socialLinks: [{ icon: 'github', link: 'https://github.com/message163' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/StaminaMyGo' }],
   },
 
   markdown: {
@@ -83,4 +84,4 @@ export default defineConfig({
     theme: { light: 'one-dark-pro', dark: 'one-dark-pro' },
     image: { lazyLoading: true },
   },
-})
+}))
