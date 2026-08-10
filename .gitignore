@@ -23,3 +23,33 @@ preview.pid
 # verification artifacts
 .shots/
 .chrome-profile/
+# 补充 GitHub CLI 临时文件（你之前遇到的）
+gh-auth.out
+gh-auth.pid
+gh-cli-*.log
+
+# pnpm 相关（如果用 pnpm）
+pnpm-debug.log
+.pnpm-store/
+
+# 包管理器锁文件（根据团队习惯，通常保留）
+# package-lock.json
+# pnpm-lock.yaml
+# yarn.lock
+
+# 操作系统临时文件
+Thumbs.db
+desktop.ini
+
+# 构建工具临时文件
+*.tsbuildinfo
+.next/
+.nuxt/
+.output/
+
+# 测试覆盖率
+coverage/
+.nyc_output/
+
+# 部署临时文件
+.deploy_temp/
