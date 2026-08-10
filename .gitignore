@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# vitepress build output & cache
+.vitepress/dist/
+.vitepress/cache/
+
+# misc
+.DS_Store
+*.local
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+*.log
+
+# local preview server
+preview.log
+preview.log.err
+preview.pid
+
+# verification artifacts
+.shots/
+.chrome-profile/
