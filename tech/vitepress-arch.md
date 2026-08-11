@@ -90,17 +90,27 @@ export default createContentLoader(['tech/**/*.md', 'acgn/**/*.md', 'news/**/*.m
 > 一个 SSG 的核心就三件事：**读 Markdown → 渲染页面 → 输出静态文件**。
 
 
-## 构建流程（Mermaid）
+## 构建流程
 
-```mermaid
-flowchart LR
-    A[编写 .md 源码] --> B[vitepress build]
-    B --> C[Shiki 代码高亮]
-    B --> D[渲染 Vue 组件]
-    C --> E[生成静态 HTML]
-    D --> E
-    E --> F[.vitepress/dist]
-    F --> G[GitHub Actions 上传]
-    G --> H[GitHub Pages CDN]
-    H --> I[用户访问]
+```text
+[编写 .md 源码]
+      │
+      ▼
+[vitepress build] ──┬── [Shiki 代码高亮] ──┐
+                    │                       │
+                    └── [渲染 Vue 组件]  ───┤
+                                            ▼
+                                   [生成静态 HTML]
+                                            │
+                                            ▼
+                                   [.vitepress/dist]
+                                            │
+                                            ▼
+                                 [GitHub Actions 上传]
+                                            │
+                                            ▼
+                                 [GitHub Pages CDN]
+                                            │
+                                            ▼
+                                     [用户访问]
 ```

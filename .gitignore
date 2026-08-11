@@ -53,3 +53,9 @@ coverage/
 
 # 部署临时文件
 .deploy_temp/
+
+# 诊断/调试脚本（临时）
+repro-*.cjs
+check-assets.cjs
+ocr.ps1
+bug/
