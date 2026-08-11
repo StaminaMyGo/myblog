@@ -16,6 +16,9 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: base + 'favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#1e1e1e' }],
+    ['script', {}, `
+      (function(){function s(){var id=decodeURIComponent(location.hash.slice(1));if(!id)return;var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'start'})}}window.addEventListener('hashchange',function(){setTimeout(s,100)});window.addEventListener('load',function(){setTimeout(s,300)})})();
+    `],
   ],
 
   themeConfig: {
