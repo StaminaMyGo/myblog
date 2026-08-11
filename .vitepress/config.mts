@@ -11,6 +11,7 @@ export default defineConfig({
   cleanUrls: true,
   srcExclude: ['README.md', 'LINK_FIX_REPORT.md'],
   lastUpdated: true,
+  appearance: false,
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: base + 'favicon.svg' }],
