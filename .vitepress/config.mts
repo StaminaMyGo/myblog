@@ -9,7 +9,7 @@ export default defineConfig({
   lang: 'zh-CN',
   base,
   cleanUrls: true,
-  srcExclude: ['README.md'],
+  srcExclude: ['README.md', 'LINK_FIX_REPORT.md'],
   lastUpdated: true,
 
   head: [
