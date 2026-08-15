@@ -1,4 +1,4 @@
-﻿---
+---
 title: GitHub Pages + CI/CD 实战：让博客自动部署
 description: 从零配置 GitHub Actions，push 后自动构建并发布到 GitHub Pages。
 date: 2026-08-10
@@ -7,10 +7,11 @@ tags: [DevOps, GitHub Actions, CI/CD, VitePress]
 
 # GitHub Pages + CI/CD 实战：让博客自动部署
 
-写博客最爽的一刻，是 `git push` 之后什么都不用做，网站自己就更新了。
-本文记录这个博客的自动化部署方案：**GitHub Actions 构建 → Pages 发布**。
+写博客最爽的一刻，莫过于 `git push` 之后什么都不用做，网站自己就更新了。本文记录这个博客的自动化部署方案：**GitHub Actions 构建 → Pages 发布**，从仓库设置到 workflow 编写，一步步复现整条部署链路。
 
 ## 原理
+
+整个流程可以浓缩成下面这张图：你推送代码，Actions 负责构建，Pages CDN 负责分发，最终用户访问到的是最新的静态站点。
 
 ```text
 [你 push 到 main]  -->  [GitHub Actions 触发]  -->  [pnpm build]
@@ -30,9 +31,11 @@ tags: [DevOps, GitHub Actions, CI/CD, VitePress]
 Build and deployment: GitHub Actions
 ```
 
+这一步是让 GitHub Pages 放弃传统的分支发布模式，改为完全由 workflow 控制发布行为的前提。
+
 ### 2. 编写 workflow
 
-在仓库根目录创建 `.github/workflows/deploy.yml`：
+在仓库根目录创建 `.github/workflows/deploy.yml`，内容如下：
 
 ```yaml
 name: Deploy VitePress site to Pages
@@ -84,6 +87,8 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
+工作流分为 `build` 与 `deploy` 两个 job：前者负责安装依赖并构建静态产物，后者等待构建成功后把产物发布到 Pages。`permissions` 与 `concurrency` 分别保证权限最小化和同一时间只有一个部署任务在跑。
+
 ### 3. 关键点：base 路径
 
 项目站点（`username.github.io/repo`）必须设置正确的 `base`，否则资源 404：
@@ -95,6 +100,10 @@ export default defineConfig({ base })
 ```
 
 本地开发默认 `/`，CI 中由 workflow 注入 `/myblog/`，一套配置两处复用。
+
+::: warning
+如果你的博客部署在用户名仓库（`username.github.io`）下，`base` 应为 `/`，无需注入 `BASE_PATH`；只有项目子路径仓库才需要这一步。
+:::
 
 ## 效果
 
@@ -108,3 +117,9 @@ export default defineConfig({ base })
 ::: tip
 免费、自动、零服务器，这就是 GitHub Pages + Actions 的魅力。
 :::
+
+## 相关阅读
+
+- [VitePress 架构笔记：它到底是怎么工作的](/Tech/vitepress-arch) —— 了解构建产物与静态站点生成原理
+- [myblog 项目 v1 说明文档](/Tech/myblog-V1) —— 本博客完整的技术架构复盘
+- [myblog 项目复盘](/Project/myblog) —— 从项目视角回看整个开发过程
