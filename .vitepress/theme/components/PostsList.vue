@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { computed } from 'vue'
 import { withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
@@ -18,9 +18,12 @@ const props = withDefaults(
 )
 
 const CATS: Record<string, { label: string; icon: string }> = {
-  tech: { label: '技术项', icon: '🖥️' },
-  acgn: { label: 'ACGN 项', icon: '🎮' },
-  news: { label: '时事热点', icon: '📡' },
+  tech: { label: '技术分析', icon: '🖥️' },
+  product: { label: '产品分析', icon: '📱' },
+  acgn: { label: 'ACGN 评价', icon: '🎮' },
+  project: { label: '项目复盘', icon: '🧩' },
+  me: { label: '关于我', icon: '👤' },
+  news: { label: '时事热点（归档）', icon: '📡' },
 }
 
 const filtered = computed<Post[]>(() => {

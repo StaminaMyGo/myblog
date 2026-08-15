@@ -23,16 +23,17 @@ preview.pid
 # verification artifacts
 .shots/
 .chrome-profile/
-# 补充 GitHub CLI 临时文件（你之前遇到的）
+
+# GitHub CLI 临时文件
 gh-auth.out
 gh-auth.pid
 gh-cli-*.log
 
-# pnpm 相关（如果用 pnpm）
-pnpm-debug.log
+# pnpm 相关
 .pnpm-store/
+pnpm-debug.log
 
-# 包管理器锁文件（根据团队习惯，通常保留）
+# 包管理器锁文件（按团队习惯保留）
 # package-lock.json
 # pnpm-lock.yaml
 # yarn.lock
@@ -47,7 +48,7 @@ desktop.ini
 .nuxt/
 .output/
 
-# 测试覆盖率
+# 测试覆盖
 coverage/
 .nyc_output/
 
@@ -59,3 +60,6 @@ repro-*.cjs
 check-assets.cjs
 ocr.ps1
 bug/
+
+# 遗留组件（已从主题注册移除，本机文件被占用无法删除）
+.vitepress/theme/components/TerminalHome.vue

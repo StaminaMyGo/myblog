@@ -1,6 +1,6 @@
 /* =========================================================
    myblog · nerd.css
-   编辑器经典风格（VS Code / 终端 混合美学）
+   DeepSeek 橙白风格（活力橙 + 白 / 浅灰 / 深灰）
    ========================================================= */
 
 /* ---------- 基础 ---------- */
@@ -10,11 +10,10 @@ html, body {
 body {
   font-size: 15px;
   letter-spacing: 0.02em;
-  padding-bottom: 26px; /* 给底部状态栏留位 */
 }
 ::selection {
-  background: rgba(152, 195, 121, 0.35);
-  color: #fff;
+  background: rgba(249, 115, 22, 0.25);
+  color: var(--mb-text);
 }
 a {
   text-decoration-thickness: 1px;
@@ -22,45 +21,46 @@ a {
 
 /* 自定义滚动条（WebKit） */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--mb-bg-inset); }
+::-webkit-scrollbar-track { background: var(--mb-bg-soft); }
 ::-webkit-scrollbar-thumb {
-  background: var(--mb-border);
-  border: 2px solid var(--mb-bg-inset);
+  background: #d1d5db;
+  border: 2px solid var(--mb-bg);
   border-radius: 6px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--mb-green); }
+::-webkit-scrollbar-thumb:hover { background: var(--mb-orange); }
 
-/* ---------- 顶栏：菜单条风格 ---------- */
+/* ---------- 顶栏 ---------- */
 .VPNavBar {
-  background: var(--mb-bg-alt) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
   border-bottom: 1px solid var(--mb-border);
+  backdrop-filter: saturate(1.4) blur(8px);
 }
 .VPNavBarTitle .title {
-  font-weight: 700;
-  color: var(--mb-green);
-  letter-spacing: 0.06em;
+  font-weight: 800;
+  color: var(--mb-orange-deep);
+  letter-spacing: 0.02em;
 }
 .VPNavBarMenuLink {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--mb-text-dim) !important;
   border-bottom: 2px solid transparent;
 }
 .VPNavBarMenuLink:hover {
-  color: var(--mb-green) !important;
+  color: var(--mb-orange-deep) !important;
 }
 .VPNavBarMenuLink.active {
-  color: var(--mb-green) !important;
-  border-bottom-color: var(--mb-green);
+  color: var(--mb-orange-deep) !important;
+  border-bottom-color: var(--mb-orange);
 }
 
 /* 搜索按钮 */
 .DocSearch-Button {
   background: var(--mb-bg-soft) !important;
   border: 1px solid var(--mb-border) !important;
-  border-radius: 4px !important;
+  border-radius: 6px !important;
 }
 .DocSearch-Button:hover {
-  border-color: var(--mb-green) !important;
+  border-color: var(--mb-orange) !important;
 }
 
 /* ---------- 侧边栏 ---------- */
@@ -75,28 +75,28 @@ a {
   font-size: 13.5px;
 }
 .VPSidebarItem.is-active > .item .text {
-  color: var(--mb-green);
+  color: var(--mb-orange-deep);
 }
 .VPSidebarItem.is-active > .item .link::before {
   content: '▸ ';
-  color: var(--mb-green);
+  color: var(--mb-orange);
 }
 
-/* ---------- 文档区标题：编辑器大纲风格 ---------- */
+/* ---------- 文档区标题 ---------- */
 .vp-doc h1 {
   font-size: 2em;
   border-bottom: 1px solid var(--mb-border);
   padding-bottom: 0.35em;
-  color: var(--mb-green);
+  color: var(--mb-orange-deep);
   position: relative;
 }
 .vp-doc h1::after {
   content: '▌';
-  color: var(--mb-green);
+  color: var(--mb-orange);
   animation: mb-blink 1.1s steps(2, start) infinite;
 }
 .vp-doc h2 {
-  color: var(--mb-cyan);
+  color: var(--mb-text);
   border-top: 1px dashed var(--mb-border-soft);
   padding-top: 1.2em;
   margin-top: 1.6em;
@@ -113,31 +113,31 @@ a {
 
 /* ---------- 正文链接 ---------- */
 .vp-doc a {
-  color: var(--mb-cyan);
+  color: var(--mb-orange-deep);
   text-decoration: none;
-  border-bottom: 1px dashed rgba(86, 182, 194, 0.5);
+  border-bottom: 1px dashed rgba(249, 115, 22, 0.5);
 }
 .vp-doc a:hover {
-  color: var(--mb-green);
+  color: #c2410c;
   border-bottom-style: solid;
 }
 
 /* ---------- 内联代码 ---------- */
 .vp-doc :not(pre) > code {
-  background: var(--mb-bg-soft);
-  border: 1px solid var(--mb-border);
-  color: var(--mb-yellow);
+  background: var(--mb-orange-soft);
+  border: 1px solid var(--mb-orange-border);
+  color: #c2410c;
   border-radius: 4px;
   font-size: 0.85em;
   padding: 0.15em 0.4em;
 }
 
-/* ---------- 代码块：编辑器窗口风格 ---------- */
+/* ---------- 代码块：深色底窗口风格 ---------- */
 .vp-doc div[class*='language-'] {
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid var(--mb-border);
   background: var(--mb-bg-inset);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   margin: 1.2em 0;
 }
 .vp-doc div[class*='language-']::before {
@@ -147,8 +147,8 @@ a {
   left: 14px;
   width: 12px; height: 12px;
   border-radius: 50%;
-  background: var(--mb-red);
-  box-shadow: 20px 0 0 var(--mb-yellow), 40px 0 0 var(--mb-green);
+  background: #f87171;
+  box-shadow: 20px 0 0 #fbbf24, 40px 0 0 #34d399;
   z-index: 2;
 }
 .vp-doc div[class*='language-'] .lang {
@@ -156,7 +156,7 @@ a {
   top: 10px;
   right: 14px;
   z-index: 2;
-  color: var(--mb-text-faint);
+  color: #94a3b8;
   text-transform: lowercase;
   font-size: 11px;
 }
@@ -170,36 +170,35 @@ a {
   width: 2.2em;
   margin-right: 1em;
   text-align: right;
-  color: var(--mb-text-faint);
+  color: #64748b;
   opacity: 0.6;
   user-select: none;
 }
 .vp-doc div[class*='language-'] .vp-code span { transition: none; }
-.vp-doc div[class*='language-']:hover .lang { color: var(--mb-cyan); }
+.vp-doc div[class*='language-']:hover .lang { color: var(--mb-orange); }
 
-/* ---------- 引用块：终端注释风格 ---------- */
+/* ---------- 引用块 ---------- */
 .vp-doc blockquote {
-  border-left: 3px solid var(--mb-green);
-  background: rgba(152, 195, 121, 0.06);
-  border-radius: 0 4px 4px 0;
+  border-left: 3px solid var(--mb-orange);
+  background: rgba(249, 115, 22, 0.05);
+  border-radius: 0 6px 6px 0;
   color: var(--mb-text-dim);
   padding: 0.6em 1em;
 }
-.vp-doc blockquote p::before { content: '> '; color: var(--mb-green); }
+.vp-doc blockquote p::before { content: '> '; color: var(--mb-orange); }
 
-/* ---------- 提示框：编辑器诊断风格 ---------- */
+/* ---------- 提示框 ---------- */
 .vp-doc .custom-block {
-  border-radius: 4px;
+  border-radius: 6px;
   border-left-width: 3px;
   font-size: 0.95em;
 }
-.vp-doc .custom-block.tip { border-color: var(--mb-cyan); }
-.vp-doc .custom-block.warning { border-color: var(--mb-yellow); }
+.vp-doc .custom-block.tip { border-color: var(--mb-orange); }
+.vp-doc .custom-block.warning { border-color: var(--mb-amber); }
 .vp-doc .custom-block.danger { border-color: var(--mb-red); }
 .vp-doc .custom-block .custom-block-title {
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   font-size: 0.85em;
 }
 
@@ -215,27 +214,27 @@ a {
 }
 .vp-doc th {
   background: var(--mb-bg-alt);
-  color: var(--mb-green);
+  color: var(--mb-orange-deep);
 }
 
-/* ---------- 按钮：终端命令风格 ---------- */
+/* ---------- 按钮 ---------- */
 .vp-button {
-  border-radius: 4px !important;
+  border-radius: 6px !important;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
 }
 .vp-button.brand {
-  background: var(--mb-green) !important;
-  color: #141414 !important;
-  border: 1px solid var(--mb-green) !important;
+  background: var(--mb-orange) !important;
+  color: #fff !important;
+  border: 1px solid var(--mb-orange) !important;
 }
-.vp-button.brand:hover { background: var(--mb-cyan) !important; border-color: var(--mb-cyan) !important; }
+.vp-button.brand:hover { background: var(--mb-orange-deep) !important; border-color: var(--mb-orange-deep) !important; }
 .vp-button.alt {
   background: transparent !important;
-  color: var(--mb-green) !important;
+  color: var(--mb-orange-deep) !important;
   border: 1px solid var(--mb-border) !important;
 }
-.vp-button.alt:hover { border-color: var(--mb-green) !important; }
+.vp-button.alt:hover { border-color: var(--mb-orange) !important; }
 
 /* ---------- 页脚 ---------- */
 .VPFooter {
@@ -246,113 +245,14 @@ a {
   color: var(--mb-text-faint);
 }
 
-/* ---------- 首页终端窗口 ---------- */
-.term-shell { margin: 24px 0 8px; }
-.term-window {
-  background: var(--mb-bg-inset);
-  border: 1px solid var(--mb-border);
-  border-radius: 8px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-}
-.term-titlebar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  background: var(--mb-bg-alt);
-  border-bottom: 1px solid var(--mb-border);
-}
-.term-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-.term-dot.r { background: var(--mb-red); }
-.term-dot.y { background: var(--mb-yellow); }
-.term-dot.g { background: var(--mb-green); }
-.term-title {
-  margin-left: 8px;
-  font-size: 12.5px;
-  color: var(--mb-text-dim);
-  font-family: var(--mb-mono);
-}
-.term-body {
-  padding: 18px 20px 22px;
-  font-family: var(--mb-mono), var(--mb-mono-cjk);
-  font-size: 14px;
-  line-height: 1.75;
-  overflow-x: auto;
-}
-.term-banner {
-  color: var(--mb-green);
-  font-size: 13px;
-  line-height: 1.25;
-  white-space: pre;
-  margin: 0 0 10px;
-  text-shadow: 0 0 12px rgba(51, 255, 102, 0.45);
-}
-.term-line { white-space: pre-wrap; word-break: break-word; }
-.term-prompt { color: var(--mb-green); font-weight: 700; }
-.term-cmd { color: var(--mb-text); }
-.term-out { color: var(--mb-text-dim); }
-.term-out a { color: var(--mb-cyan); border-bottom: 1px dashed rgba(86,182,194,.5); }
-.term-out a:hover { color: var(--mb-green); }
-.term-ok { color: var(--mb-green); }
-.term-cursor {
-  display: inline-block;
-  width: 9px; height: 17px;
-  background: var(--mb-term-green);
-  vertical-align: text-bottom;
-  animation: mb-blink 1.1s steps(2, start) infinite;
-  box-shadow: 0 0 8px rgba(51, 255, 102, 0.8);
-}
-
-/* 首页栏目卡片 */
-.mb-cats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  margin: 20px 0 8px;
-}
-.mb-card {
-  display: block;
-  background: var(--mb-bg-soft);
-  border: 1px solid var(--mb-border);
-  border-radius: 8px;
-  padding: 18px 20px;
-  text-decoration: none !important;
-  border-bottom-width: 1px !important;
-  transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
-}
-.mb-card:hover {
-  border-color: var(--mb-green);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-}
-.mb-card-icon { font-size: 26px; margin-bottom: 10px; }
-.mb-card-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--mb-green);
-  margin-bottom: 6px;
-}
-.mb-card-desc {
-  font-size: 13.5px;
-  color: var(--mb-text-dim);
-  line-height: 1.6;
-}
-.mb-card-more {
-  margin-top: 10px;
-  font-size: 12.5px;
-  color: var(--mb-cyan);
-}
-.mb-card:hover .mb-card-more { color: var(--mb-green); }
-
 /* ---------- 文章列表 ---------- */
 .mb-section-title {
   margin-top: 34px;
-  color: var(--mb-cyan);
+  color: var(--mb-orange-deep);
   font-size: 16px;
   font-weight: 700;
 }
-.mb-section-title::before { content: '❯ '; color: var(--mb-green); }
+.mb-section-title::before { content: '❯ '; color: var(--mb-orange); }
 
 .mb-posts { list-style: none; margin: 12px 0 0; padding: 0; }
 .mb-post {
@@ -362,7 +262,7 @@ a {
   padding: 10px 4px;
   border-bottom: 1px dashed var(--mb-border-soft);
 }
-.mb-post:hover { background: rgba(152, 195, 121, 0.05); }
+.mb-post:hover { background: var(--mb-orange-soft); }
 .mb-post-date {
   flex: 0 0 auto;
   font-size: 12.5px;
@@ -377,7 +277,7 @@ a {
   text-decoration: none !important;
   border-bottom: none !important;
 }
-.mb-post:hover .mb-post-title { color: var(--mb-green); }
+.mb-post:hover .mb-post-title { color: var(--mb-orange-deep); }
 .mb-post-excerpt {
   font-size: 13px;
   color: var(--mb-text-dim);
@@ -387,9 +287,9 @@ a {
 .mb-tag {
   display: inline-block;
   font-size: 11.5px;
-  color: var(--mb-cyan);
-  background: rgba(86, 182, 194, 0.1);
-  border: 1px solid rgba(86, 182, 194, 0.35);
+  color: #c2410c;
+  background: var(--mb-orange-soft);
+  border: 1px solid var(--mb-orange-border);
   border-radius: 3px;
   padding: 1px 7px;
   margin-right: 6px;
@@ -401,61 +301,28 @@ a {
   padding: 12px 4px;
 }
 
-/* ---------- 底部状态栏（VSCode 风） ---------- */
-.mb-statusbar {
-  position: fixed;
-  left: 0; right: 0; bottom: 0;
-  height: 26px;
-  background: var(--mb-bg-alt);
-  border-top: 1px solid var(--mb-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px;
-  font-size: 12px;
-  font-family: var(--mb-mono);
-  color: var(--mb-text-dim);
-  z-index: 999;
-}
-.mb-statusbar .mb-sb-left, .mb-statusbar .mb-sb-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  min-width: 0;
-}
-.mb-statusbar .mb-sb-item { white-space: nowrap; }
-.mb-statusbar .mb-sb-branch { color: var(--mb-green); }
-.mb-statusbar .mb-sb-branch::before { content: '⑂ '; }
-.mb-statusbar .mb-sb-dirty { color: var(--mb-yellow); }
-.mb-statusbar .mb-sb-ok { color: var(--mb-green); }
-.mb-statusbar .mb-sb-lang { color: var(--mb-cyan); }
-@media (max-width: 720px) {
-  .mb-statusbar .mb-sb-hide-sm { display: none; }
-}
-
 /* ---------- 目录（outline） ---------- */
 .VPDocAsideOutline .outline-link { font-size: 13px; }
-.VPDocAsideOutline .outline-link.active { color: var(--mb-green); }
+.VPDocAsideOutline .outline-link.active { color: var(--mb-orange-deep); }
 
 /* ---------- 编辑此页 / 上一页下一页 ---------- */
-.VPDocFooterEdit .edit-link-button { color: var(--mb-cyan) !important; }
-.VPDocFooterEdit .edit-link-button:hover { color: var(--mb-green) !important; }
-.pager-link .title { color: var(--mb-green); }
+.VPDocFooterEdit .edit-link-button { color: var(--mb-orange-deep) !important; }
+.VPDocFooterEdit .edit-link-button:hover { color: #c2410c !important; }
+.pager-link .title { color: var(--mb-orange-deep); }
 
-/* ---------- 关于页 / 通用 ---------- */
-.mb-avatar {
-  font-size: 40px;
-  display: block;
-  margin-bottom: 8px;
+/* ---------- 首页六屏：加宽内容容器（仅含 .six-screens 的页面） ---------- */
+.VPDoc:has(.six-screens) .content-container {
+  max-width: 1100px;
+}
+.six-screens {
+  margin-top: 8px;
+}
+.vp-doc .ss-head h2::before,
+.vp-doc .ss-name::after {
+  content: none;
 }
 
-/* 响应式微调 */
-@media (max-width: 640px) {
-  body { font-size: 14px; }
-  .term-body { font-size: 12.5px; padding: 14px; }
-}
-
-/* ---------- 阅读进度条（编辑器风格） ---------- */
+/* ---------- 阅读进度条 ---------- */
 .mb-progress {
   position: fixed;
   top: 0;
@@ -464,11 +331,16 @@ a {
   height: 3px;
   z-index: 1000;
   pointer-events: none;
-  background: rgba(152, 195, 121, 0.12);
+  background: rgba(249, 115, 22, 0.12);
 }
 .mb-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--mb-green), var(--mb-cyan));
-  box-shadow: 0 0 8px rgba(152, 195, 121, 0.7);
+  background: linear-gradient(90deg, var(--mb-orange), #fbbf24);
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
   transition: width 0.1s linear;
+}
+
+/* ---------- 响应式微调 ---------- */
+@media (max-width: 640px) {
+  body { font-size: 14px; }
 }

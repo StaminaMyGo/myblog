@@ -1,10 +1,6 @@
-﻿---
+---
 title: myblog
-description: Nerd 风的个人博客：技术项 / ACGN 项 / 时事热点
+description: 个人博客：技术分析 / 产品分析 / ACGN 评价 / 项目复盘 / 关于我
 ---
 
-<TerminalHome />
-
-## 最近更新
-
-<PostsList grouped limit="2" />
+<SixScreens />

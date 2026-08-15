@@ -5,17 +5,17 @@ const base = process.env.BASE_PATH || '/'
 
 export default defineConfig({
   title: 'myblog',
-  description: '一个 Nerd 风的个人博客：技术项 / ACGN 项 / 时事热点',
+  description: '个人博客：技术分析 / 产品分析 / ACGN 评价 / 项目复盘 / 关于我',
   lang: 'zh-CN',
   base,
   cleanUrls: true,
-  srcExclude: ['README.md', 'LINK_FIX_REPORT.md'],
+  srcExclude: ['README.md', 'LINK_FIX_REPORT.md', '个人博客PRD.md'],
   lastUpdated: true,
   appearance: false,
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: base + 'favicon.svg' }],
-    ['meta', { name: 'theme-color', content: '#1e1e1e' }],
+    ['meta', { name: 'theme-color', content: '#f97316' }],
     ['script', {}, `
       (function(){function s(){var id=decodeURIComponent(location.hash.slice(1));if(!id)return;var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'start'})}}window.addEventListener('hashchange',function(){setTimeout(s,100)});window.addEventListener('load',function(){setTimeout(s,300)})})();
     `],
@@ -25,45 +25,74 @@ export default defineConfig({
     logo: { light: '/logo.svg', dark: '/logo.svg', alt: 'myblog' },
 
     nav: [
-      { text: '~/home', link: '/' },
-      { text: '技术项', link: '/tech/' },
-      { text: 'ACGN 项', link: '/acgn/' },
-      { text: '时事热点', link: '/news/' },
-      { text: '关于', link: '/about' },
+      { text: '首页', link: '/' },
+      { text: '技术分析', link: '/Tech/' },
+      { text: '产品分析', link: '/Product/' },
+      { text: 'ACGN 评价', link: '/ACGN/' },
+      { text: '项目复盘', link: '/Project/' },
+      { text: '关于我', link: '/Me/' },
     ],
 
     sidebar: {
-      '/tech/': [
+      '/Tech/': [
         {
-          text: '技术项',
+          text: '技术分析',
           collapsed: false,
           items: [
-            { text: '栏目首页', link: '/tech/' },
-            { text: 'GitHub Pages + CI/CD 实战', link: '/tech/gh-pages-ci' },
-            { text: 'VitePress 架构笔记', link: '/tech/vitepress-arch' },
-            { text: '为什么我沉迷 Markdown', link: '/tech/markdown-love' },
+            { text: '栏目首页', link: '/Tech/' },
+            { text: 'GitHub Pages + CI/CD 实战', link: '/Tech/gh-pages-ci' },
+            { text: 'VitePress 架构笔记', link: '/Tech/vitepress-arch' },
+            { text: '为什么我沉迷 Markdown', link: '/Tech/markdown-love' },
+            { text: 'myblog V1 技术架构复盘', link: '/Tech/myblog-V1' },
+            { text: '对 AI 不同发展阶段的猜想', link: '/Tech/对AI不同发展阶段的猜想' },
           ],
         },
       ],
-      '/acgn/': [
+      '/Product/': [
         {
-          text: 'ACGN 项',
+          text: '产品分析',
           collapsed: false,
           items: [
-            { text: '栏目首页', link: '/acgn/' },
-            { text: '2026 夏季新番扫雷', link: '/acgn/summer-2026-anime' },
-            { text: 'Galgame 安利：近期通关记录', link: '/acgn/galgame-2026' },
+            { text: '栏目首页', link: '/Product/' },
+            { text: 'OpenClaw 对我的启示', link: '/Product/Openclaw 对我的启示' },
+            { text: '为什么我想走产品方向', link: '/Product/为什么想走产品方向' },
+            { text: '微信输入法', link: '/Product/微信输入法' },
+            { text: '给千问的一个建议', link: '/Product/给千问的一个建议' },
           ],
         },
       ],
-      '/news/': [
+      '/ACGN/': [
         {
-          text: '时事热点',
+          text: 'ACGN 评价',
           collapsed: false,
           items: [
-            { text: '栏目首页', link: '/news/' },
-            { text: '2026-08 AI 大模型动态', link: '/news/ai-roundup-2026-08' },
-            { text: '开发者生态观察', link: '/news/dev-ecosystem' },
+            { text: '栏目首页', link: '/ACGN/' },
+            { text: '《甜蜜夏日》', link: '/ACGN/《甜蜜夏日》' },
+            { text: '《白箱》剧场版', link: '/ACGN/《白箱》剧场版' },
+          ],
+        },
+      ],
+      '/Project/': [
+        {
+          text: '项目复盘',
+          collapsed: false,
+          items: [
+            { text: '栏目首页', link: '/Project/' },
+            { text: 'myblog 项目复盘', link: '/Project/myblog' },
+            { text: 'Everything Agent 文件检索', link: '/Project/BasedOnEverythingAgent' },
+            { text: 'LifeTracker 番茄钟', link: '/Project/LifeTracker' },
+            { text: 'TimeLine 学习时间线', link: '/Project/PRD_TimeLine个人学习时间线' },
+            { text: '乡村助学平台', link: '/Project/乡村建议平台-小组合作' },
+          ],
+        },
+      ],
+      '/Me/': [
+        {
+          text: '关于我',
+          collapsed: false,
+          items: [
+            { text: '栏目首页', link: '/Me/' },
+            { text: '个人介绍', link: '/Me/个人介绍' },
           ],
         },
       ],
