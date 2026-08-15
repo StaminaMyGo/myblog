@@ -1,6 +1,6 @@
 ---
 title: myblog 项目 v1 说明文档
-description: myblog v1 技术架构复盘：Nerd 风 VitePress 静态博客的选型、设计与实现。
+description: myblog v1 技术架构复盘：DeepSeek 橙白风格 VitePress 静态博客的选型、设计与实现。
 date: 2026-08-15
 tags: [VitePress, 项目复盘, 前端, DevOps]
 ---
@@ -11,7 +11,7 @@ myblog 是作者的个人博客静态站点项目。本文档作为 v1 技术架
 
 > **项目名称**：myblog
 > **版本**：0.1.0
-> **类型**：Nerd 风个人博客（静态站点）
+> **类型**：DeepSeek 橙白风格个人博客（静态站点）
 > **部署地址**：https://staminamygo.github.io/myblog/
 > **文档日期**：2026-08-15
 
@@ -46,7 +46,7 @@ myblog 是作者的个人博客静态站点项目。本文档作为 v1 技术架
 ### 2.1 核心目标
 
 1. **内容沉淀**：将技术学习笔记、ACGN 作品记录、行业热点观察统一归档，形成可检索的个人知识库
-2. **个人品牌**：搭建具有鲜明风格（Nerd / 编辑器美学）的个人主页，展示技术能力与兴趣广度
+2. **个人品牌**：搭建具有鲜明风格（DeepSeek 橙白 / 编辑器美学）的个人主页，展示技术能力与兴趣广度
 3. **写作习惯**：降低写作门槛（Markdown + 热更新 + 自动部署），倒逼持续输出
 4. **技术实践**：以博客为载体，实践 VitePress 主题开发、Vue 3 组件设计、GitHub Actions CI/CD 等前端与 DevOps 技能
 
@@ -87,7 +87,7 @@ myblog 是作者的个人博客静态站点项目。本文档作为 v1 技术架
 | **构建工具** | Vite | 5.4.x（VitePress 内置） |
 | **包管理器** | pnpm | 10.x |
 | **运行时** | Node.js | 22.x |
-| **代码高亮** | Shiki | one-dark-pro 主题 |
+| **代码高亮** | Shiki | github-light 主题（浅色） |
 | **本地搜索** | minisearch | VitePress 内置本地搜索 |
 | **CI/CD** | GitHub Actions | push to main 自动触发 |
 | **托管平台** | GitHub Pages | 免费静态托管 |
@@ -102,37 +102,52 @@ myblog/
 │       └── deploy.yml              # CI/CD：构建 + 部署到 GitHub Pages
 ├── .vitepress/
 │   ├── config.mts                  # 站点主配置（导航 / 侧边栏 / 搜索 / Markdown）
-│   ├── posts.data.ts               # 文章数据加载器（自动收集三大栏目文章）
+│   ├── posts.data.ts               # 文章数据加载器（自动收集五个专区文章）
 │   ├── theme/
 │   │   ├── index.ts                # 自定义主题入口（注册全局组件）
 │   │   ├── components/
-│   │   │   ├── TerminalHome.vue    # 首页终端窗口组件（ASCII Banner + 分类卡片）
-│   │   │   ├── PostsList.vue       # 文章列表组件（支持分类筛选 / 分组 / 数量限制）
-│   │   │   ├── MyLayout.vue        # 自定义布局（注入阅读进度条 + 状态栏）
-│   │   │   ├── ReadingProgress.vue # 顶部阅读进度条
-│   │   │   └── StatusBar.vue       # 底部编辑器风格状态栏
+│   │   │   ├── SixScreens.vue      # 首页六屏组件（简介/项目/产品/技术/自我介绍/技术栈）
+│   │   │   └── PostsList.vue       # 文章列表组件（支持五分区筛选 / 分组 / 数量限制）
 │   │   └── style/
-│   │       ├── vars.css            # 设计令牌（配色 / 字体 / 覆盖 VitePress 默认变量）
-│   │       └── nerd.css            # Nerd 风主题样式（终端 / 编辑器美学）
+│   │       ├── vars.css            # 设计令牌（DeepSeek 橙白配色 / 字体 / 覆盖 VitePress 默认变量）
+│   │       └── nerd.css            # DeepSeek 橙白主题样式
 │   └── dist/                       # 构建产物（.gitignore）
 ├── public/
 │   ├── favicon.svg                 # 站点图标
 │   └── logo.svg                    # 站点 Logo
-├── tech/                           # 【栏目】技术项
-│   ├── index.md                    # 栏目首页
-│   ├── vitepress-arch.md           # VitePress 架构笔记
+├── Tech/                           # 【分区】技术分析
+│   ├── index.md                    # 分区首页
 │   ├── gh-pages-ci.md              # GitHub Pages + CI/CD 实战
-│   └── markdown-love.md            # 为什么我沉迷 Markdown
-├── acgn/                           # 【栏目】ACGN 项
-│   ├── index.md                    # 栏目首页
-│   ├── summer-2026-anime.md        # 2026 夏季新番扫雷
-│   └── galgame-2026.md             # Galgame 安利：近期通关记录
-├── news/                           # 【栏目】时事热点
-│   ├── index.md                    # 栏目首页
+│   ├── vitepress-arch.md           # VitePress 架构笔记
+│   ├── markdown-love.md            # 为什么我沉迷 Markdown
+│   ├── myblog-V1.md                # myblog V1 技术架构复盘
+│   └── 对AI不同发展阶段的猜想.md     # AI 发展猜想
+├── Product/                        # 【分区】产品分析
+│   ├── index.md                    # 分区首页
+│   ├── Openclaw 对我的启示.md      # AI 范式转变思考
+│   ├── 为什么想走产品方向.md        # 职业选择心路
+│   ├── 微信输入法.md               # 效率工具拆解
+│   └── 给千问的一个建议.md          # 产品建议
+├── ACGN/                           # 【分区】ACGN 评价
+│   ├── index.md                    # 分区首页
+│   ├── 《甜蜜夏日》.md             # Galgame 评价
+│   └── 《白箱》剧场版.md           # 动画剧场版评价
+├── Project/                        # 【分区】项目复盘
+│   ├── index.md                    # 分区首页
+│   ├── myblog.md                   # myblog 项目复盘
+│   ├── BasedOnEverythingAgent.md   # 文件检索 Agent
+│   ├── LifeTracker.md              # 番茄钟应用
+│   ├── PRD_TimeLine个人学习时间线.md # 学习时间线 PRD
+│   └── 乡村建议平台-小组合作.md      # 乡村助学平台
+├── Me/                             # 【分区】关于我
+│   ├── index.md                    # 分区首页
+│   └── 个人介绍.md                 # 个人介绍
+├── news/                           # 时事热点归档（不在导航中）
+│   ├── index.md                    # 归档首页
 │   ├── ai-roundup-2026-08.md       # 2026-08 AI 大模型动态
 │   └── dev-ecosystem.md            # 开发者生态观察
-├── index.md                        # 站点首页（终端窗口 + 最近更新）
-├── about.md                        # 关于页
+├── index.md                        # 站点首页（六屏展示）
+├── about.md                        # 旧关于页（重定向到 /Me/）
 ├── package.json                    # 项目依赖与脚本
 ├── pnpm-lock.yaml                  # 依赖锁定文件
 ├── .gitignore                      # Git 忽略规则
@@ -141,14 +156,16 @@ myblog/
 
 ### 4.3 主要功能模块
 
-#### 4.3.1 终端风格首页（TerminalHome）
+#### 4.3.1 首页六屏（SixScreens）
 
-首页以模拟终端窗口为核心视觉元素：
+首页采用"六度分隔"理念的六屏滚动展示，每屏占满一屏高度，右侧圆点导航 + IntersectionObserver 高亮当前屏：
 
-- **ASCII Art Banner**：展示 "myblog" 大字标题
-- **模拟命令行交互**：依次执行 `whoami`、`ls categories/`、`./deploy --ci` 等命令，输出作者介绍、栏目列表和部署状态
-- **分类卡片**：三大栏目（技术项 / ACGN 项 / 时事热点）以卡片形式展示，含图标、标题和描述
-- **闪烁光标**：终端末尾的动态光标增强沉浸感
+1. **个人简介**：姓名、一句话介绍 + 技能 / 兴趣标签云（Python、React、ACGN 等关键词）
+2. **项目复盘**：双行布局，可左右滑动查看多篇项目复盘文章，点击跳转
+3. **产品分析**：四列网格，展示最新 4 篇产品分析文章
+4. **技术分析**：4×4 网格展示技术分析内容
+5. **个人自我介绍**：职业背景、技术方向、职业目标
+6. **网站技术栈与相关信息**：技术栈、GitHub 仓库与部署信息
 
 #### 4.3.2 文章列表组件（PostsList）
 
@@ -156,7 +173,7 @@ myblog/
 
 | Prop | 类型 | 说明 |
 |------|------|------|
-| `category` | string | 按栏目筛选（`tech` / `acgn` / `news`） |
+| `category` | string | 按分区筛选（`tech` / `product` / `acgn` / `project` / `me`） |
 | `limit` | number | 限制显示文章数量 |
 | `grouped` | boolean | 是否按栏目分组展示 |
 
@@ -171,13 +188,16 @@ myblog/
 - **阅读进度条**（ReadingProgress）：页面顶部的细条，实时显示当前阅读位置百分比，使用 `requestAnimationFrame` 优化滚动性能
 - **底部状态栏**（StatusBar）：模拟 VS Code 底部状态栏，显示 Git 分支、编码格式（UTF-8 / LF）、包管理器（pnpm）、部署状态等装饰性信息
 
-#### 4.3.4 三大内容栏目
+#### 4.3.4 五大内容分区
 
-| 栏目 | 目录 | 内容定位 | 文章数 |
+| 分区 | 目录 | 内容定位 | 文章数 |
 |------|------|----------|--------|
-| 技术项 | `tech/` | 编程、框架、DevOps、学习笔记 | 3 篇 |
-| ACGN 项 | `acgn/` | 动画、漫画、游戏、轻小说 | 2 篇 |
-| 时事热点 | `news/` | AI、科技、行业观察 | 2 篇 |
+| 技术分析 | `Tech/` | 编程、框架、DevOps、学习笔记与行业猜想 | 6 篇 |
+| 产品分析 | `Product/` | AI 与效率工具的产品视角拆解 | 4 篇 |
+| ACGN 评价 | `ACGN/` | 动画、漫画、游戏、轻小说记录与安利 | 2 篇 |
+| 项目复盘 | `Project/` | 项目背景、技术栈、结果与复盘 | 5 篇 |
+| 关于我 | `Me/` | 个人介绍、职业背景与联系方式 | 1 篇 |
+| 时事归档 | `news/` | AI、科技、行业观察（归档，不在导航中） | 2 篇 |
 
 每篇文章使用标准 frontmatter 元数据：
 
@@ -223,18 +243,19 @@ GitHub Actions 触发
 
 ## 五、主要应用技术
 
-### 5.1 Nerd 风主题设计
+### 5.1 DeepSeek 橙白主题设计
 
-自定义主题以 **VS Code Dark+ / One Dark / 经典终端绿** 为配色灵感，通过 CSS 变量体系实现：
+自定义主题以 **DeepSeek 橙白配色（活力橙 + 白 / 浅灰 / 深灰）** 为基调，通过 CSS 变量体系实现：
 
 | 设计令牌 | 色值 | 用途 |
 |----------|------|------|
-| `--mb-bg` | `#1e1e1e` | 编辑器底色 |
-| `--mb-bg-alt` | `#252526` | 侧边栏 / 顶栏 |
-| `--mb-green` | `#98c379` | 品牌色 / 高亮 |
-| `--mb-cyan` | `#56b6c2` | 链接 / 二级标题 |
-| `--mb-yellow` | `#e5c07b` | 内联代码 |
-| `--mb-term-green` | `#33ff66` | 终端绿灯效果 |
+| `--mb-orange` | `#f97316` | 品牌色 / 高亮 |
+| `--mb-orange-deep` | `#ea580c` | 链接 / 强调 / 悬停 |
+| `--mb-bg` | `#ffffff` | 页面底色 |
+| `--mb-bg-alt` | `#fff7ed` | 侧边栏 / 顶栏 |
+| `--mb-bg-soft` | `#faf5ef` | 卡片 / 悬浮 |
+| `--mb-bg-inset` | `#f6f8fa` | 代码块底色（浅色高亮） |
+| `--mb-text` | `#1f2937` | 正文文字 |
 
 字体栈采用等宽字体优先：`Cascadia Code → JetBrains Mono → Fira Code → Sarasa Mono SC`
 
@@ -244,11 +265,11 @@ GitHub Actions 触发
 - **h1 闪烁光标**：标题末尾的 `▌` 字符以 1.1s 周期闪烁
 - **代码块窗口化**：代码块顶部模拟 macOS 窗口三色按钮（红 / 黄 / 绿），右上角显示语言标签
 - **侧边栏激活指示**：当前页面前添加 `▸` 符号
-- **自定义滚动条**：WebKit 滚动条 hover 时变为品牌绿色
+- **自定义滚动条**：WebKit 滚动条 hover 时变为品牌橙色
 
 ### 5.3 VitePress 内容加载器
 
-`posts.data.ts` 使用 VitePress 的 `createContentLoader` API，在构建时自动扫描三大栏目目录下的所有 Markdown 文件，提取 frontmatter 元数据并按日期排序，生成可在组件中直接导入的静态数据。
+`posts.data.ts` 使用 VitePress 的 `createContentLoader` API，在构建时自动扫描五个专区目录下的所有 Markdown 文件，提取 frontmatter 元数据并按日期排序，生成可在组件中直接导入的静态数据。
 
 ### 5.4 Markdown 增强
 
@@ -263,9 +284,9 @@ GitHub Actions 触发
 
 | 指标 | 数据 |
 |------|------|
-| 已部署页面 | 12 个（首页 + 关于 + 3 栏目首页 + 7 篇文章） |
-| 文章总数 | 7 篇（技术 3 + ACGN 2 + 时事 2） |
-| 自定义 Vue 组件 | 5 个 |
+| 已部署页面 | 28 个（首页 + 五个分区首页 + 19 篇文章 + 归档等） |
+| 文章总数 | 19 篇（技术 6 + 产品 4 + ACGN 2 + 项目 5 + 关于我 1 + 时事归档 2） |
+| 自定义 Vue 组件 | 2 个（SixScreens + PostsList） |
 | CI/CD 部署 | ✅ 已配置，push 自动部署 |
 | 线上可用性 | ✅ 全部页面 HTTP 200 |
 | 部署地址 | https://staminamygo.github.io/myblog/ |
@@ -290,8 +311,8 @@ GitHub Actions 触发
 
 1. **零成本运行**：GitHub Pages 免费托管 + GitHub Actions 免费 CI/CD，无任何服务器支出
 2. **极致写作体验**：Markdown 源码 + 热更新预览 + push 自动部署，全程键盘操作
-3. **风格辨识度高**：Nerd / 编辑器美学在个人博客中独树一帜，终端首页和状态栏等细节增强了记忆点
-4. **架构清晰可扩展**：三大栏目结构扁平，新增文章只需在对应目录新建 `.md` 文件，无需修改配置
+3. **风格辨识度高**：DeepSeek 橙白配色与首页六屏在个人博客中辨识度高，文章目录与代码高亮等细节增强了阅读体验
+4. **架构清晰可扩展**：五分区结构扁平，新增文章只需在对应目录新建 `.md` 文件，无需修改配置
 5. **性能良好**：纯静态站点，移除冗余依赖后页面加载和导航流畅
 
 ### 6.4 后续规划
@@ -302,7 +323,7 @@ GitHub Actions 触发
 | 评论系统 | 引入 giscus 等基于 GitHub Discussions 的第三方评论方案 |
 | 访问统计 | 接入 Google Analytics 或不蒜子等轻量统计 |
 | RSS 订阅 | 生成 RSS feed，方便读者订阅更新 |
-| 主题优化 | 移动端适配细节打磨、暗色 / 亮色切换（当前强制深色） |
+| 主题优化 | 移动端适配细节打磨、暗色模式支持（当前为浅色橙白主题） |
 | Mermaid 按需加载 | 实现图表组件的懒加载，在需要时动态引入 |
 
 ## 相关阅读

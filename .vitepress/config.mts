@@ -113,7 +113,7 @@ export default defineConfig({
 
   markdown: {
     lineNumbers: true,
-    theme: { light: 'one-dark-pro', dark: 'one-dark-pro' },
+    theme: { light: 'github-light', dark: 'github-light' },
     image: { lazyLoading: true },
   },
 })

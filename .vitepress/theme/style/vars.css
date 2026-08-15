@@ -16,7 +16,7 @@
   --mb-bg:        #ffffff;
   --mb-bg-alt:    #fff7ed;   /* 侧边栏 / 顶栏（暖橙白） */
   --mb-bg-soft:   #faf5ef;   /* 卡片 / 悬浮 */
-  --mb-bg-inset:  #0f172a;   /* 代码块深色底（保持对比度） */
+  --mb-bg-inset:  #f6f8fa;   /* 代码块浅色底（github-light 浅色高亮） */
 
   /* 卡片（六屏首页） */
   --mb-card-bg: #ffffff;
