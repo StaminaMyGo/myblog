@@ -123,15 +123,15 @@ function fmtDate(iso: string): string {
             v-for="(t, i) in tagCloud"
             :key="i"
             class="ss-tag"
-            :class="`t${t.tier}`"
+            :class="[`t${t.tier}`, `c${i % 6}`]"
           >{{ t.text }}</span>
         </div>
         <p class="ss-hint">下滑，认识我 · 一共六屏</p>
       </div>
     </section>
 
-    <!-- 第二屏：项目复盘 -->
-    <section class="ss-screen" data-index="1" :ref="bindScreen(1)">
+    <!-- 第二屏：项目复盘（Deep Teal 特色卡片） -->
+    <section class="ss-screen ss-screen-project" data-index="1" :ref="bindScreen(1)">
       <div class="ss-head">
         <span class="ss-no">02 / 06</span>
         <h2>项目复盘</h2>
@@ -155,8 +155,8 @@ function fmtDate(iso: string): string {
       <a class="ss-link-all" :href="withBase('/Project/')">查看全部项目复盘 →</a>
     </section>
 
-    <!-- 第三屏：产品分析 -->
-    <section class="ss-screen" data-index="2" :ref="bindScreen(2)">
+    <!-- 第三屏：产品分析（Hot Pink 特色卡片） -->
+    <section class="ss-screen ss-screen-product" data-index="2" :ref="bindScreen(2)">
       <div class="ss-head">
         <span class="ss-no">03 / 06</span>
         <h2>产品分析</h2>
@@ -173,8 +173,8 @@ function fmtDate(iso: string): string {
       <a class="ss-link-all" :href="withBase('/Product/')">查看全部产品分析 →</a>
     </section>
 
-    <!-- 第四屏：技术分析 -->
-    <section class="ss-screen" data-index="3" :ref="bindScreen(3)">
+    <!-- 第四屏：技术分析（Lavender 特色卡片） -->
+    <section class="ss-screen ss-screen-tech" data-index="3" :ref="bindScreen(3)">
       <div class="ss-head">
         <span class="ss-no">04 / 06</span>
         <h2>技术分析</h2>
@@ -191,8 +191,8 @@ function fmtDate(iso: string): string {
       <a class="ss-link-all" :href="withBase('/Tech/')">查看全部技术分析 →</a>
     </section>
 
-    <!-- 第五屏：个人自我介绍 -->
-    <section class="ss-screen ss-about" data-index="4" :ref="bindScreen(4)">
+    <!-- 第五屏：个人自我介绍（Peach 特色卡片） -->
+    <section class="ss-screen ss-about ss-screen-about" data-index="4" :ref="bindScreen(4)">
       <div class="ss-head">
         <span class="ss-no">05 / 06</span>
         <h2>自我介绍</h2>
@@ -222,8 +222,8 @@ function fmtDate(iso: string): string {
       <a class="ss-link-all" :href="withBase('/Me/')">完整个人介绍 →</a>
     </section>
 
-    <!-- 第六屏：网站技术栈与相关信息 -->
-    <section class="ss-screen ss-stack" data-index="5" :ref="bindScreen(5)">
+    <!-- 第六屏：网站技术栈与相关信息（Cream 卡片） -->
+    <section class="ss-screen ss-stack ss-screen-stack" data-index="5" :ref="bindScreen(5)">
       <div class="ss-head">
         <span class="ss-no">06 / 06</span>
         <h2>本站技术栈</h2>
@@ -279,25 +279,25 @@ function fmtDate(iso: string): string {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid var(--mb-primary);
+  border: 2px solid var(--mb-brand-pink);
   background: transparent;
   padding: 0;
   cursor: pointer;
   transition: all var(--mb-duration-fast) ease;
 }
 .ss-dots button.active {
-  background: var(--mb-primary);
+  background: var(--mb-brand-pink);
   transform: scale(1.25);
 }
 
 /* 屏幕通用 */
 .ss-screen {
-  min-height: calc(100vh - var(--vp-nav-height, 56px));
+  min-height: calc(100vh - var(--vp-nav-height, 64px));
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 48px 0 40px;
-  scroll-margin-top: var(--vp-nav-height, 56px);
+  scroll-margin-top: var(--vp-nav-height, 64px);
 }
 .ss-head {
   margin-bottom: 20px;
@@ -321,7 +321,7 @@ function fmtDate(iso: string): string {
   margin: 0;
 }
 
-/* 第一屏：Hero */
+/* 第一屏：Hero（奶油画布） */
 .ss-hero {
   text-align: left;
 }
@@ -330,7 +330,7 @@ function fmtDate(iso: string): string {
 }
 .ss-eyebrow {
   font-family: var(--mb-mono);
-  color: var(--mb-primary);
+  color: var(--mb-accent);
   font-size: 14px;
   margin-bottom: 8px;
 }
@@ -340,9 +340,10 @@ function fmtDate(iso: string): string {
   color: var(--mb-text);
   margin: 0 0 12px;
   border: none;
+  letter-spacing: -0.02em;
 }
 .ss-cursor {
-  color: var(--mb-primary);
+  color: var(--mb-brand-pink);
   animation: mb-blink 1.1s steps(2, start) infinite;
 }
 .ss-tagline {
@@ -357,19 +358,27 @@ function fmtDate(iso: string): string {
   gap: 10px;
   max-width: 640px;
 }
+/* 标签云：六色品牌循环（c0-c5 = 粉/深青/薰衣草/蜜桃/赭黄/薄荷） */
 .ss-tag {
   display: inline-block;
   padding: 5px 13px;
-  border-radius: 999px;
-  background: var(--mb-primary-soft);
-  border: 1px solid var(--mb-primary-border);
-  color: var(--mb-primary-deep);
+  border-radius: 9999px;
+  background: rgba(255, 77, 139, 0.16);
+  border: 1px solid rgba(255, 77, 139, 0.45);
+  color: var(--mb-text);
   font-size: 13px;
   font-weight: 600;
+  transition: border-color var(--mb-duration-fast) ease, transform var(--mb-duration-fast) ease;
 }
+.ss-tag:hover { border-color: var(--mb-text); }
+.ss-tag.c1 { background: rgba(26, 58, 58, 0.12); border-color: rgba(26, 58, 58, 0.4); }
+.ss-tag.c2 { background: rgba(184, 164, 237, 0.32); border-color: rgba(184, 164, 237, 0.6); }
+.ss-tag.c3 { background: rgba(255, 176, 132, 0.32); border-color: rgba(255, 176, 132, 0.6); }
+.ss-tag.c4 { background: rgba(232, 185, 74, 0.26); border-color: rgba(232, 185, 74, 0.55); }
+.ss-tag.c5 { background: rgba(164, 212, 197, 0.36); border-color: rgba(164, 212, 197, 0.65); }
 .ss-tag.t3 { font-size: 16px; padding: 7px 16px; }
 .ss-tag.t2 { font-size: 13.5px; }
-.ss-tag.t1 { font-size: 12px; opacity: 0.85; }
+.ss-tag.t1 { font-size: 12px; opacity: 0.9; }
 .ss-hint {
   margin-top: 36px;
   font-size: 13px;
@@ -394,39 +403,37 @@ function fmtDate(iso: string): string {
   flex: 0 0 260px;
 }
 
-/* 卡片 */
+/* 特色卡片（rounded.xl · 无阴影，深度来自饱和色） */
 .ss-card {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: var(--mb-card-bg);
-  border: 1px solid var(--mb-border);
-  border-radius: 10px;
-  padding: 16px 18px;
+  background: var(--card-bg, var(--mb-bg));
+  border: 1px solid var(--card-border, var(--mb-border));
+  border-radius: 24px;
+  padding: 24px 26px;
   text-decoration: none !important;
   border-bottom-width: 1px !important;
-  transition: border-color var(--mb-duration-fast) ease, transform var(--mb-duration-fast) ease, box-shadow var(--mb-duration-fast) ease;
+  transition: filter var(--mb-duration-fast) ease;
 }
 .ss-card:hover {
-  border-color: var(--mb-accent);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.12);
+  filter: brightness(1.06);
 }
 .ss-card-date {
   font-family: var(--mb-mono);
   font-size: 11.5px;
-  color: var(--mb-text-faint);
+  color: var(--card-date, var(--mb-text-faint));
 }
 .ss-card-title {
   font-size: 15.5px;
   font-weight: 700;
-  color: var(--mb-text);
+  color: var(--card-title, var(--mb-text));
   line-height: 1.45;
 }
-.ss-card:hover .ss-card-title { color: var(--mb-accent-deep); }
+.ss-card:hover .ss-card-title { color: var(--card-title-hover, var(--mb-accent-deep)); }
 .ss-card-excerpt {
   font-size: 12.5px;
-  color: var(--mb-text-dim);
+  color: var(--card-excerpt, var(--mb-text-dim));
   line-height: 1.6;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -436,8 +443,41 @@ function fmtDate(iso: string): string {
 .ss-card-more {
   margin-top: auto;
   font-size: 12px;
-  color: var(--mb-accent-deep);
+  color: var(--card-more, var(--mb-accent-deep));
   font-weight: 600;
+}
+
+/* 项目复盘 → feature-card-teal（深青 · 白字） */
+.ss-screen-project .ss-card {
+  --card-bg: var(--mb-brand-teal);
+  --card-border: var(--mb-brand-teal);
+  --card-date: rgba(255, 255, 255, 0.6);
+  --card-title: var(--mb-on-dark);
+  --card-title-hover: var(--mb-brand-mint);
+  --card-excerpt: rgba(255, 255, 255, 0.8);
+  --card-more: var(--mb-brand-ochre);
+}
+
+/* 产品分析 → feature-card-pink（热粉 · 白字） */
+.ss-screen-product .ss-card {
+  --card-bg: var(--mb-brand-pink);
+  --card-border: var(--mb-brand-pink);
+  --card-date: rgba(255, 255, 255, 0.62);
+  --card-title: var(--mb-on-dark);
+  --card-title-hover: var(--mb-on-dark);
+  --card-excerpt: rgba(255, 255, 255, 0.82);
+  --card-more: var(--mb-on-dark);
+}
+
+/* 技术分析 → feature-card-lavender（薰衣草 · 墨字） */
+.ss-screen-tech .ss-card {
+  --card-bg: var(--mb-brand-lavender);
+  --card-border: var(--mb-brand-lavender);
+  --card-date: var(--mb-text-faint);
+  --card-title: var(--mb-text);
+  --card-title-hover: var(--mb-accent-deep);
+  --card-excerpt: var(--mb-text-dim);
+  --card-more: var(--mb-accent-deep);
 }
 
 /* 三屏四列 / 四屏 4×4 网格 */
@@ -457,29 +497,31 @@ function fmtDate(iso: string): string {
   margin-top: 22px;
   font-size: 13.5px;
   font-weight: 600;
-  color: var(--mb-accent-deep);
+  color: var(--mb-accent);
   transition: color var(--mb-duration-fast) ease;
 }
 .ss-link-all:hover {
-  color: var(--mb-primary-deep);
+  color: var(--mb-accent-deep);
 }
 
-/* 第五屏：自我介绍 */
+/* 第五屏：自我介绍 → feature-card-peach（蜜桃 · 墨字） */
 .ss-about-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 .ss-about-card {
-  background: var(--mb-card-bg);
-  border: 1px solid var(--mb-border);
-  border-radius: 10px;
-  padding: 20px;
+  background: var(--mb-brand-peach);
+  border: 1px solid var(--mb-brand-peach);
+  border-radius: 24px;
+  padding: 24px 26px;
+  transition: filter var(--mb-duration-fast) ease;
 }
+.ss-about-card:hover { filter: brightness(1.04); }
 .ss-about-card h3 {
   font-size: 16px;
   margin: 0 0 10px;
-  color: var(--mb-primary-deep);
+  color: var(--mb-text);
 }
 .ss-about-card p {
   font-size: 13.5px;
@@ -488,7 +530,7 @@ function fmtDate(iso: string): string {
   margin: 0;
 }
 
-/* 第六屏：技术栈 */
+/* 第六屏：技术栈 → feature-card-cream（奶油底） */
 .ss-stack-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -498,11 +540,13 @@ function fmtDate(iso: string): string {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  background: var(--mb-card-bg);
+  background: var(--mb-bg-soft);
   border: 1px solid var(--mb-border);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 14px 16px;
+  transition: border-color var(--mb-duration-fast) ease;
 }
+.ss-stack-chip:hover { border-color: var(--mb-brand-ochre); }
 .ss-stack-name {
   font-size: 14.5px;
   font-weight: 700;
@@ -524,11 +568,11 @@ function fmtDate(iso: string): string {
 .ss-links a {
   font-size: 14px;
   font-weight: 600;
-  color: var(--mb-accent-deep);
+  color: var(--mb-accent);
   transition: color var(--mb-duration-fast) ease;
 }
 .ss-links a:hover {
-  color: var(--mb-primary-deep);
+  color: var(--mb-text);
 }
 
 @media (max-width: 900px) {

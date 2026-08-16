@@ -1,6 +1,6 @@
 # myblog
 
-一个 **Micro-interactions 青白风格**的个人博客 / 求职作品集，基于 [VitePress](https://vitepress.dev) 构建，
+一个 **Clay 奶油风格**的个人博客 / 求职作品集，基于 [VitePress](https://vitepress.dev) 构建，
 托管在 GitHub Pages，通过 GitHub Actions 实现 **push 即自动部署**。
 
 五个内容专区：
@@ -18,7 +18,7 @@
 ## 技术栈
 
 - **框架**：VitePress 1.6（Vue 3 + Vite 静态站点生成器）
-- **主题**：SIGNAL SURFACE SYSTEM · Micro-interactions 风格青白主题（Teal 青 + 白 / 浅青 / 深灰，橙色反馈强调）
+- **主题**：CLAY SURFACE SYSTEM · Clay 风格配色（奶油画布 `#fffaf0` + Ink 墨色主按钮 + Pink/Teal/Lavender/Peach/Ochre 饱和特色卡片）
 - **首页**：六屏滚动展示（个人简介 / 项目复盘 / 产品分析 / 技术分析 / 自我介绍 / 网站技术栈）
 - **包管理**：pnpm
 - **CI/CD**：GitHub Actions → GitHub Pages
