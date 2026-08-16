@@ -1,6 +1,6 @@
 # myblog
 
-一个 **DeepSeek 橙白风格**的个人博客 / 求职作品集，基于 [VitePress](https://vitepress.dev) 构建，
+一个 **Micro-interactions 青白风格**的个人博客 / 求职作品集，基于 [VitePress](https://vitepress.dev) 构建，
 托管在 GitHub Pages，通过 GitHub Actions 实现 **push 即自动部署**。
 
 五个内容专区：
@@ -18,7 +18,7 @@
 ## 技术栈
 
 - **框架**：VitePress 1.6（Vue 3 + Vite 静态站点生成器）
-- **主题**：DeepSeek 风格橙白主题（活力橙 + 白 / 浅灰 / 深灰）
+- **主题**：SIGNAL SURFACE SYSTEM · Micro-interactions 风格青白主题（Teal 青 + 白 / 浅青 / 深灰，橙色反馈强调）
 - **首页**：六屏滚动展示（个人简介 / 项目复盘 / 产品分析 / 技术分析 / 自我介绍 / 网站技术栈）
 - **包管理**：pnpm
 - **CI/CD**：GitHub Actions → GitHub Pages

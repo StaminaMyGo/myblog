@@ -1,34 +1,50 @@
 /* =========================================================
-   myblog · orange-white theme tokens
-   配色灵感：DeepSeek 风格橙白 —— 活力橙 + 白 / 浅灰 / 深灰
+   myblog · SIGNAL SURFACE SYSTEM
+   Micro-interactions theme tokens
+   配色灵感：UI UX Pro Max Style #16 / Source #16
+   —— 生产力工具青白基调 + 橙色反馈强调
    ========================================================= */
 :root {
-  /* 品牌色：活力橙 */
-  --mb-orange:        #f97316;
-  --mb-orange-deep:   #ea580c;
-  --mb-orange-soft:   rgba(249, 115, 22, 0.12);
-  --mb-orange-border: rgba(249, 115, 22, 0.35);
-  --mb-amber:         #d97706;
-  --mb-red:           #dc2626;
-  --mb-green:         #16a34a;
+  /* 品牌主色：Teal（专注 / 生产力） */
+  --mb-primary:        #0d9488;
+  --mb-primary-deep:   #0f766e;
+  --mb-primary-soft:   rgba(13, 148, 136, 0.12);
+  --mb-primary-border: rgba(13, 148, 136, 0.35);
+  --mb-on-primary:     #000000;
 
-  /* 背景（橙白） */
+  /* 反馈强调色：Orange（动作 / 提示） */
+  --mb-accent:        #ea580c;
+  --mb-accent-deep:   #c2410c;
+  --mb-accent-soft:   rgba(234, 88, 12, 0.12);
+  --mb-accent-border: rgba(234, 88, 12, 0.35);
+  --mb-on-accent:     #000000;
+
+  /* Micro-interactions 状态反馈色 */
+  --mb-amber:         #f59e0b;
+  --mb-red:           #ef4444;
+  --mb-green:         #22c55e;
+
+  /* 背景（青白） */
   --mb-bg:        #ffffff;
-  --mb-bg-alt:    #fff7ed;   /* 侧边栏 / 顶栏（暖橙白） */
-  --mb-bg-soft:   #faf5ef;   /* 卡片 / 悬浮 */
-  --mb-bg-inset:  #f6f8fa;   /* 代码块浅色底（github-light 浅色高亮） */
+  --mb-bg-alt:    #f0fdfa;   /* 侧边栏 / 顶栏（浅青白） */
+  --mb-bg-soft:   #f0fdfa;   /* 卡片 / 悬浮 */
+  --mb-bg-inset:  #e8f1f4;   /* 代码块浅色底（github-light 浅色高亮） */
 
   /* 卡片（六屏首页） */
   --mb-card-bg: #ffffff;
 
   /* 边框 */
-  --mb-border:        #e5e7eb;
-  --mb-border-soft:   #f3f4f6;
+  --mb-border:        #99f6e4;
+  --mb-border-soft:   #ccfbf1;
 
-  /* 文本（深灰） */
-  --mb-text:      #1f2937;
-  --mb-text-dim:  #6b7280;
-  --mb-text-faint:#9ca3af;
+  /* 文本（深青灰） */
+  --mb-text:      #134e4a;
+  --mb-text-dim:  #475569;
+  --mb-text-faint:#64748b;
+
+  /* Micro-interactions 快速响应时长 */
+  --mb-duration-fast: 80ms;
+  --mb-duration:      120ms;
 
   /* 等宽字体栈 */
   --mb-mono: 'Cascadia Code', 'JetBrains Mono', 'Fira Code', 'Sarasa Mono SC',
@@ -37,7 +53,7 @@
                  'Microsoft YaHei', sans-serif;
 }
 
-/* 覆盖 VitePress 默认变量（浅色橙白主题） */
+/* 覆盖 VitePress 默认变量（浅色 Micro-interactions 主题） */
 :root {
   --vp-c-bg: var(--mb-bg);
   --vp-c-bg-alt: var(--mb-bg-alt);
@@ -54,23 +70,23 @@
   --vp-c-divider: var(--mb-border-soft);
   --vp-c-gutter: var(--mb-bg);
 
-  --vp-c-brand-1: var(--mb-orange);
-  --vp-c-brand-2: var(--mb-orange-deep);
-  --vp-c-brand-3: #c2410c;
-  --vp-c-brand-soft: rgba(249, 115, 22, 0.15);
+  --vp-c-brand-1: var(--mb-primary);
+  --vp-c-brand-2: var(--mb-primary-deep);
+  --vp-c-brand-3: #115e59;
+  --vp-c-brand-soft: rgba(13, 148, 136, 0.15);
 
   --vp-c-warning-1: var(--mb-amber);
   --vp-c-warning-2: var(--mb-amber);
-  --vp-c-warning-soft: rgba(217, 119, 6, 0.15);
+  --vp-c-warning-soft: rgba(245, 158, 11, 0.15);
   --vp-c-danger-1: var(--mb-red);
   --vp-c-danger-2: var(--mb-red);
-  --vp-c-danger-soft: rgba(220, 38, 38, 0.12);
-  --vp-c-tip-1: var(--mb-orange-deep);
-  --vp-c-tip-2: var(--mb-orange-deep);
-  --vp-c-tip-soft: rgba(249, 115, 22, 0.12);
+  --vp-c-danger-soft: rgba(239, 68, 68, 0.12);
+  --vp-c-tip-1: var(--mb-primary-deep);
+  --vp-c-tip-2: var(--mb-primary-deep);
+  --vp-c-tip-soft: rgba(13, 148, 136, 0.12);
 
-  --vp-c-highlight-bg: rgba(249, 115, 22, 0.18);
-  --vp-c-highlight-border: var(--mb-orange);
+  --vp-c-highlight-bg: rgba(13, 148, 136, 0.18);
+  --vp-c-highlight-border: var(--mb-primary);
 
   --vp-font-family-base: var(--mb-mono), var(--mb-mono-cjk);
   --vp-font-family-mono: var(--mb-mono);

@@ -279,14 +279,14 @@ function fmtDate(iso: string): string {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid var(--mb-orange);
+  border: 2px solid var(--mb-primary);
   background: transparent;
   padding: 0;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--mb-duration-fast) ease;
 }
 .ss-dots button.active {
-  background: var(--mb-orange);
+  background: var(--mb-primary);
   transform: scale(1.25);
 }
 
@@ -330,7 +330,7 @@ function fmtDate(iso: string): string {
 }
 .ss-eyebrow {
   font-family: var(--mb-mono);
-  color: var(--mb-orange);
+  color: var(--mb-primary);
   font-size: 14px;
   margin-bottom: 8px;
 }
@@ -342,7 +342,7 @@ function fmtDate(iso: string): string {
   border: none;
 }
 .ss-cursor {
-  color: var(--mb-orange);
+  color: var(--mb-primary);
   animation: mb-blink 1.1s steps(2, start) infinite;
 }
 .ss-tagline {
@@ -361,9 +361,9 @@ function fmtDate(iso: string): string {
   display: inline-block;
   padding: 5px 13px;
   border-radius: 999px;
-  background: var(--mb-orange-soft);
-  border: 1px solid var(--mb-orange-border);
-  color: var(--mb-orange-deep);
+  background: var(--mb-primary-soft);
+  border: 1px solid var(--mb-primary-border);
+  color: var(--mb-primary-deep);
   font-size: 13px;
   font-weight: 600;
 }
@@ -405,12 +405,12 @@ function fmtDate(iso: string): string {
   padding: 16px 18px;
   text-decoration: none !important;
   border-bottom-width: 1px !important;
-  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color var(--mb-duration-fast) ease, transform var(--mb-duration-fast) ease, box-shadow var(--mb-duration-fast) ease;
 }
 .ss-card:hover {
-  border-color: var(--mb-orange);
+  border-color: var(--mb-accent);
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.12);
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.12);
 }
 .ss-card-date {
   font-family: var(--mb-mono);
@@ -423,7 +423,7 @@ function fmtDate(iso: string): string {
   color: var(--mb-text);
   line-height: 1.45;
 }
-.ss-card:hover .ss-card-title { color: var(--mb-orange-deep); }
+.ss-card:hover .ss-card-title { color: var(--mb-accent-deep); }
 .ss-card-excerpt {
   font-size: 12.5px;
   color: var(--mb-text-dim);
@@ -436,7 +436,7 @@ function fmtDate(iso: string): string {
 .ss-card-more {
   margin-top: auto;
   font-size: 12px;
-  color: var(--mb-orange);
+  color: var(--mb-accent-deep);
   font-weight: 600;
 }
 
@@ -457,7 +457,11 @@ function fmtDate(iso: string): string {
   margin-top: 22px;
   font-size: 13.5px;
   font-weight: 600;
-  color: var(--mb-orange-deep);
+  color: var(--mb-accent-deep);
+  transition: color var(--mb-duration-fast) ease;
+}
+.ss-link-all:hover {
+  color: var(--mb-primary-deep);
 }
 
 /* 第五屏：自我介绍 */
@@ -475,7 +479,7 @@ function fmtDate(iso: string): string {
 .ss-about-card h3 {
   font-size: 16px;
   margin: 0 0 10px;
-  color: var(--mb-orange-deep);
+  color: var(--mb-primary-deep);
 }
 .ss-about-card p {
   font-size: 13.5px;
@@ -520,7 +524,11 @@ function fmtDate(iso: string): string {
 .ss-links a {
   font-size: 14px;
   font-weight: 600;
-  color: var(--mb-orange-deep);
+  color: var(--mb-accent-deep);
+  transition: color var(--mb-duration-fast) ease;
+}
+.ss-links a:hover {
+  color: var(--mb-primary-deep);
 }
 
 @media (max-width: 900px) {
