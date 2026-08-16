@@ -65,10 +65,44 @@ export default defineConfig({
         {
           text: 'ACGN 评价',
           collapsed: false,
+          items: [{ text: '栏目首页', link: '/ACGN/' }],
+        },
+        {
+          text: '作品评测',
+          collapsed: false,
           items: [
-            { text: '栏目首页', link: '/ACGN/' },
             { text: '《甜蜜夏日》', link: '/ACGN/《甜蜜夏日》' },
             { text: '《白箱》剧场版', link: '/ACGN/《白箱》剧场版' },
+            { text: 'Galgame 游玩记录与评价', link: '/ACGN/acgs作品评价' },
+            { text: '《装甲恶鬼村正》的“善恶相抵”', link: '/ACGN/善恶相抵' },
+          ],
+        },
+        {
+          text: '知识笔记',
+          collapsed: false,
+          items: [
+            { text: '剧本创作参考标准', link: '/ACGN/ACGN作品剧情结构分析' },
+            { text: 'Galgame 会社与剧本：clochette 与新岛夕', link: '/ACGN/galgame会社与剧本' },
+            { text: '型月 × 飞碟社 × FGO 制作公司', link: '/ACGN/型月公司和飞碟社（鬼灭之刃制作公司）和FGO制作公司的关系' },
+          ],
+        },
+        {
+          text: '实用指南',
+          collapsed: false,
+          items: [
+            { text: 'Switch 模拟器键盘键位设置', link: '/ACGN/switch模拟器使用指南' },
+            { text: '解决游戏不在显示屏内的问题', link: '/ACGN/解决游戏不在显示屏内的问题' },
+            { text: 'Steam 折扣节点与促销时间表', link: '/ACGN/steam折扣节点' },
+            { text: 'Limbus 英文深度考据社区', link: '/ACGN/论坛与帖子搜索' },
+          ],
+        },
+        {
+          text: '作品记录',
+          collapsed: false,
+          items: [
+            { text: 'ACGN 作品记录', link: '/ACGN/ACGN作品记录' },
+            { text: 'ACGS 时间线', link: '/ACGN/acgs时间线' },
+            { text: '轻音乐 · ACG', link: '/ACGN/轻音乐-ACG' },
           ],
         },
       ],
