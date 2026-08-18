@@ -7,9 +7,12 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "deploy": "node scripts/auto-deploy.mjs",
+    "watch:deploy": "node scripts/watch-deploy.mjs"
   },
   "devDependencies": {
+    "chokidar": "^5.0.0",
     "vitepress": "^1.6.4"
   }
 }
