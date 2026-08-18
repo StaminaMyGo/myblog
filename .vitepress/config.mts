@@ -34,10 +34,23 @@ function listMarkdownSidebarItems(dir: string): SidebarItem[] {
 }
 
 // 在手动侧边栏基础上，自动追加该目录下尚未手动添加的文章
-function withAutoSidebar(dir: string, items: SidebarItem[]): SidebarItem[] {
-  const manualLinks = new Set(items.map((item) => item.link))
+function withAutoSidebar(dir: string, groups: SidebarItem[]): SidebarItem[] {
+  const manualLinks = new Set<string>()
+  for (const group of groups) {
+    for (const item of group.items ?? []) {
+      if (item.link) manualLinks.add(item.link)
+    }
+  }
+
   const autoItems = listMarkdownSidebarItems(dir).filter((item) => !manualLinks.has(item.link))
-  return [...items, ...autoItems]
+  if (autoItems.length === 0) return groups
+
+  return groups.map((group, index) => {
+    if (index === 0) {
+      return { ...group, items: [...(group.items ?? []), ...autoItems] }
+    }
+    return group
+  })
 }
 
 export default defineConfig({
