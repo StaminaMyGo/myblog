@@ -104,9 +104,7 @@ a {
   padding-top: 1.2em;
   margin-top: 1.6em;
 }
-.vp-doc h2::before { content: '## '; color: var(--mb-text-faint); }
-.vp-doc h3::before { content: '### '; color: var(--mb-text-faint); }
-.vp-doc h4::before { content: '#### '; color: var(--mb-text-faint); }
+
 .vp-doc h2, .vp-doc h3, .vp-doc h4 { scroll-margin-top: 80px; }
 
 @keyframes mb-blink {
