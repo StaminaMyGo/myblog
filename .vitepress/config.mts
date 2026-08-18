@@ -1,7 +1,44 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import { defineConfig } from 'vitepress'
 
 // 部署时由 GitHub Actions 注入（如 /myblog/），本地开发默认 '/'（根路径）
 const base = process.env.BASE_PATH || '/'
+const repoRoot = process.cwd()
+
+interface SidebarItem {
+  text: string
+  link?: string
+  items?: SidebarItem[]
+}
+
+function readFrontmatterTitle(filePath: string): string | null {
+  const content = fs.readFileSync(filePath, 'utf8')
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+  if (!match) return null
+  const titleMatch = match[1].match(/^title:\s*(.*)$/m)
+  if (!titleMatch) return null
+  return titleMatch[1].trim().replace(/^['"]|['"]$/g, '')
+}
+
+function listMarkdownSidebarItems(dir: string): SidebarItem[] {
+  const dirPath = path.join(repoRoot, dir)
+  if (!fs.existsSync(dirPath)) return []
+  return fs.readdirSync(dirPath, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'index.md')
+    .map((entry) => {
+      const name = entry.name.replace(/\.md$/, '')
+      const text = readFrontmatterTitle(path.join(dirPath, entry.name)) || name
+      return { text, link: `/${dir}/${name}` }
+    })
+}
+
+// 在手动侧边栏基础上，自动追加该目录下尚未手动添加的文章
+function withAutoSidebar(dir: string, items: SidebarItem[]): SidebarItem[] {
+  const manualLinks = new Set(items.map((item) => item.link))
+  const autoItems = listMarkdownSidebarItems(dir).filter((item) => !manualLinks.has(item.link))
+  return [...items, ...autoItems]
+}
 
 export default defineConfig({
   title: 'myblog',
@@ -34,7 +71,7 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/Tech/': [
+      '/Tech/': withAutoSidebar('Tech', [
         {
           text: '技术分析',
           collapsed: false,
@@ -47,8 +84,8 @@ export default defineConfig({
             { text: '对 AI 不同发展阶段的猜想', link: '/Tech/对AI不同发展阶段的猜想' },
           ],
         },
-      ],
-      '/Product/': [
+      ]),
+      '/Product/': withAutoSidebar('Product', [
         {
           text: '产品分析',
           collapsed: false,
@@ -58,9 +95,10 @@ export default defineConfig({
             { text: '为什么我想走产品方向', link: '/Product/为什么想走产品方向' },
             { text: '微信输入法', link: '/Product/微信输入法' },
             { text: '给千问的一个建议', link: '/Product/给千问的一个建议' },
+            { text: 'B站听视频模式', link: '/Product/B站听视频模式' },
           ],
         },
-      ],
+      ]),
       '/ACGN/': [
         {
           text: 'ACGN 评价',
@@ -106,7 +144,7 @@ export default defineConfig({
           ],
         },
       ],
-      '/Project/': [
+      '/Project/': withAutoSidebar('Project', [
         {
           text: '项目复盘',
           collapsed: false,
@@ -117,10 +155,12 @@ export default defineConfig({
             { text: 'LifeTracker 番茄钟', link: '/Project/LifeTracker' },
             { text: 'TimeLine 学习时间线', link: '/Project/PRD_TimeLine个人学习时间线' },
             { text: '乡村助学平台', link: '/Project/乡村建议平台-小组合作' },
+            { text: '人生经验之谈（精彩！）', link: '/Project/人生经验之谈（精彩！）' },
+            { text: '什么是好领导', link: '/Project/什么是好领导' },
           ],
         },
-      ],
-      '/Me/': [
+      ]),
+      '/Me/': withAutoSidebar('Me', [
         {
           text: '关于我',
           collapsed: false,
@@ -129,7 +169,7 @@ export default defineConfig({
             { text: '个人介绍', link: '/Me/个人介绍' },
           ],
         },
-      ],
+      ]),
     },
 
     outline: { label: '文章目录', level: [2, 3] },
