@@ -53,6 +53,14 @@ function d(ms: number) {
 /* ---------- 输入驱动 ---------- */
 function onWheel(e: WheelEvent) {
   if (Math.abs(e.deltaY) < 40) return
+  // 场景内容溢出时让 .scene-body 内部滚动，而不是切换场景
+  const t = e.target as HTMLElement | null
+  const body = t?.closest?.('.scene-body')
+  if (body && body.scrollHeight > body.clientHeight) {
+    const atTop = body.scrollTop <= 0
+    const atBottom = body.scrollTop + body.clientHeight >= body.scrollHeight
+    if ((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) return
+  }
   e.preventDefault()
   go(scene.value + (e.deltaY > 0 ? 1 : -1))
 }
@@ -101,6 +109,14 @@ function onTouchStart(e: TouchEvent) {
 function onTouchEnd(e: TouchEvent) {
   const dy = touchStartY - e.changedTouches[0].clientY
   if (Math.abs(dy) < 24) return
+  // 场景内容溢出时让 .scene-body 内部滚动，而不是切换场景
+  const t = e.target as HTMLElement | null
+  const body = t?.closest?.('.scene-body')
+  if (body && body.scrollHeight > body.clientHeight) {
+    const atTop = body.scrollTop <= 0
+    const atBottom = body.scrollTop + body.clientHeight >= body.scrollHeight
+    if ((dy > 0 && !atBottom) || (dy < 0 && !atTop)) return
+  }
   e.preventDefault()
   go(scene.value + (dy > 0 ? 1 : -1))
 }
@@ -142,9 +158,9 @@ const pastItems = [
   '跟随共识',
 ]
 const nowItems = [
-  '走完开发→构建→部署→测试→上线全流程',
+  '走完开发→构建→部署→上线全流程',
   '小组协作（乡村助学平台）',
-  '用 3.7 绩点换来行业视野',
+  '用 3.7 绩点换行业视野',
   '技术价值 → 用户价值',
   '宁准不快 · 宁深不广 · 独立思考',
 ]
@@ -167,11 +183,11 @@ interface Ability {
   unfit: string
 }
 const abilities: Ability[] = [
-  { name: '需求洞察', fit: '沟通厘清真实诉求', unfit: '无对象信息的判断' },
+  { name: '需求洞察', fit: '厘清真实诉求', unfit: '无信息盲猜' },
   { name: 'vibe-coding', fit: '快速 demo 与可视化', unfit: '深度后端专项' },
   { name: '文档整理', fit: '复杂文本→结构化结论', unfit: '纯装饰排版' },
   { name: '多视角分析', fit: '平衡多方角色诉求', unfit: '单点执行' },
-  { name: '沟通协作', fit: '把握交际距离推进共识', unfit: '纯应酬' },
+  { name: '沟通协作', fit: '把握距离推进共识', unfit: '纯应酬' },
 ]
 
 /* ---------- S4 合作承诺 ---------- */
@@ -191,7 +207,7 @@ interface ProjectCard {
 const projects: ProjectCard[] = [
   {
     title: 'myblog 博客站',
-    desc: '本博客 · VitePress + GitHub Actions 自动构建部署',
+    desc: 'VitePress + GitHub Actions 自动部署',
     link: '/Project/myblog',
     icon: [
       'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z',
@@ -200,7 +216,7 @@ const projects: ProjectCard[] = [
   },
   {
     title: 'LifeTracker 番茄钟',
-    desc: '跨端时间管理 / 番茄钟应用（PWA + Android APK）',
+    desc: '跨端番茄钟 · PWA + Android',
     link: '/Project/LifeTracker',
     icon: [
       'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z',
@@ -209,7 +225,7 @@ const projects: ProjectCard[] = [
   },
   {
     title: 'Everything Agent',
-    desc: 'DeepSeek 大模型 + Everything 索引的自然语言文件检索',
+    desc: 'DeepSeek + Everything 文件检索',
     link: '/Project/BasedOnEverythingAgent',
     icon: [
       'M21 21l-4.35-4.35',
@@ -218,7 +234,7 @@ const projects: ProjectCard[] = [
   },
   {
     title: 'TimeLine 学习时间线',
-    desc: '以 PRD 形式设计的个人学习时间线 Web 应用',
+    desc: '以 PRD 设计的个人学习时间线',
     link: '/Project/PRD_TimeLine个人学习时间线',
     icon: [
       'M3 3v18h18',
@@ -227,7 +243,7 @@ const projects: ProjectCard[] = [
   },
   {
     title: '乡村助学平台',
-    desc: '小组合作项目 · React + TypeScript Web 前端',
+    desc: '小组合作 · React + TypeScript 前端',
     link: '/Project/乡村建议平台-小组合作',
     icon: [
       'M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2',
