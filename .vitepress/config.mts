@@ -72,7 +72,7 @@ export default defineConfig({
   ],
 
   themeConfig: {
-    logo: { light: '/logo.svg', dark: '/logo.svg', alt: 'myblog' },
+    logo: { light: '/logo-light.svg', dark: '/logo.svg', alt: 'myblog' },
 
     nav: [
       { text: '首页', link: '/' },

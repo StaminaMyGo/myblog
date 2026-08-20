@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="16" fill="#f5f5f7"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="15.25" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
+  <text x="32" y="42" text-anchor="middle" font-family="'SF Pro Display', system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="30" font-weight="600" letter-spacing="-0.5" fill="#1d1d1f">Le</text>
+</svg>
