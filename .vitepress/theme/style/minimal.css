@@ -313,15 +313,21 @@ a {
 .VPDocFooterEdit .edit-link-button:hover { color: var(--mb-accent) !important; }
 .pager-link .title { color: var(--mb-text); }
 
-/* ---------- 首页六屏：加宽内容容器（仅含 .six-screens 的页面） ---------- */
-.VPDoc:has(.six-screens) .content-container {
-  max-width: 1100px;
+/* ---------- 首页腾讯风格：全宽内容容器（TencentHome 组件自行 1200px 居中） ---------- */
+.VPDoc:has(.tencent-home) .content-container {
+  max-width: none;
 }
-.six-screens {
-  margin-top: 8px;
+.VPDoc:has(.tencent-home) .content {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
 }
-.vp-doc .ss-head h2::before,
-.vp-doc .ss-name::after {
+.tencent-home {
+  margin-top: 0;
+}
+/* 屏蔽 vp-doc 对首页标题的默认修饰 */
+.vp-doc .tq-head h2::before,
+.vp-doc .tq-hero h1::after {
   content: none;
 }
 

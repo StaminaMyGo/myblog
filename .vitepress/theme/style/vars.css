@@ -11,9 +11,9 @@
   --mb-base-h: 0;
   --mb-base-s: 0%;
   --mb-base-l: 96%;
-  --mb-accent-h: 211;
+  --mb-accent-h: 217;      /* 品牌蓝 #0052D9（腾讯招聘风格） */
   --mb-accent-s: 100%;
-  --mb-accent-l: 40%;
+  --mb-accent-l: 42.5%;
 
   /* --- 派生色（浅色）：改 base-h/s/l 或 accent-h/s/l 全站自动换色 --- */
   --mb-bg1: hsl(var(--mb-base-h), var(--mb-base-s), var(--mb-base-l));                        /* 次级背景 */
@@ -28,7 +28,7 @@
   --mb-ax1: hsl(var(--mb-accent-h), var(--mb-accent-s), var(--mb-accent-l));                  /* 强调色 */
   --mb-ax2: #0071e3;                                                                           /* 强调色悬停 */
   --mb-ax3: hsl(var(--mb-accent-h), var(--mb-accent-s), calc(var(--mb-accent-l) + 6%));       /* 强调色激活 */
-  --mb-ax-rgb: 0, 102, 204;
+  --mb-ax-rgb: 0, 82, 217;
 
   /* --- 主色 = 唯一交互色（Action Blue） --- */
   --mb-primary:        var(--mb-ax1);
@@ -97,6 +97,27 @@
              Consolas, 'Courier New', ui-monospace, monospace;
   --mb-mono-cjk: 'Sarasa Mono SC', 'Microsoft YaHei UI', 'PingFang SC',
                  'Microsoft YaHei', sans-serif;
+
+  /* =========================================================
+     Tencent Recruitment Design Tokens（腾讯招聘首页风格）
+     首页 TencentHome 组件消费这些令牌；深浅模式自动跟随。
+     ========================================================= */
+  --tq-blue:          #0052d9;   /* 腾讯品牌蓝 */
+  --tq-blue-deep:     #003eb3;   /* 深蓝（渐变/Hover） */
+  --tq-blue-soft:     rgba(0, 82, 217, 0.08);
+  --tq-blue-border:   rgba(0, 82, 217, 0.35);
+  --tq-text-1:        #111111;   /* 主标题 */
+  --tq-text-2:        #666666;   /* 正文描述 */
+  --tq-text-3:        #999999;   /* 弱化文字/日期 */
+  --tq-border:        #e7e7e7;   /* 虚线分隔 */
+  --tq-bg-band:       #f5f7fa;   /* 浅灰分区底（证言区） */
+  --tq-card-bg:       #ffffff;
+  --tq-radius-card:   12px;
+  --tq-shadow-card:   0 4px 12px rgba(0, 0, 0, 0.05);
+  --tq-shadow-hover:  0 8px 24px rgba(0, 0, 0, 0.10);
+  --tq-transition:    all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --tq-footer-bg:     #111111;
+  --tq-footer-text:   #999999;
 }
 
 /* --- 深色模式：只覆盖 base-l / accent-l 与方向相反的派生公式 --- */
@@ -121,6 +142,17 @@
   --mb-card-bg:  var(--mb-bg2);
 
   --mb-text: var(--mb-tx1);
+
+  /* 深色模式下的腾讯风格令牌 */
+  --tq-blue:          #5b95ff;
+  --tq-blue-soft:     rgba(91, 149, 255, 0.14);
+  --tq-blue-border:   rgba(91, 149, 255, 0.4);
+  --tq-text-1:        var(--mb-tx1);
+  --tq-text-2:        var(--mb-tx2);
+  --tq-text-3:        var(--mb-tx3);
+  --tq-border:        var(--mb-ui2);
+  --tq-bg-band:       var(--mb-bg-alt);
+  --tq-card-bg:       var(--mb-bg2);
 }
 
 /* 覆盖 VitePress 默认变量（引用 --mb-*，深浅模式自动跟随） */
