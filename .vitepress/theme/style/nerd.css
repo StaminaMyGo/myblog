@@ -182,7 +182,6 @@ a {
   color: var(--mb-text-dim);
   padding: 0.6em 1em;
 }
-.vp-doc blockquote p::before { content: '> '; color: var(--mb-brand-pink); }
 
 /* ---------- 提示框 ---------- */
 .vp-doc .custom-block {
