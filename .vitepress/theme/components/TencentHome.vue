@@ -458,7 +458,7 @@ const socials: Social[] = [
   min-height: 480px;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #003eb3 0%, #0052d9 55%, #1a6bff 100%);
+  background: var(--tq-hero-bg);
   color: #fff;
   padding: 88px 0;
 }
@@ -467,15 +467,9 @@ const socials: Social[] = [
   inset: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(circle at 85% 15%, rgba(120, 170, 255, 0.55), transparent 45%),
-    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
-  background-size:
-    100% 100%,
-    56px 56px,
-    56px 56px;
-  mask-image: radial-gradient(ellipse 90% 110% at 50% 0%, rgba(0, 0, 0, 0.7), transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse 90% 110% at 50% 0%, rgba(0, 0, 0, 0.7), transparent 75%);
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
 .tq-hero-inner {
   position: relative;
@@ -568,7 +562,7 @@ const socials: Social[] = [
 /* ---------- 2. 内容专区 ---------- */
 .tq-zone-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
 }
 .tq-zone-card {
@@ -692,7 +686,7 @@ const socials: Social[] = [
 }
 .tq-reason-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
 }
 .tq-reason-card {
@@ -873,7 +867,7 @@ const socials: Social[] = [
   color: var(--tq-blue);
 }
 
-/* ---------- 7. 页脚（腾讯规范：#111111 / #999999 / 12px） ---------- */
+/* ---------- 7. 页脚（Minimal: #f5f5f7 / #7a7a7a / 12px） ---------- */
 .tq-footer {
   background: var(--tq-footer-bg);
   color: var(--tq-footer-text);
@@ -885,12 +879,12 @@ const socials: Social[] = [
   grid-template-columns: 2fr 1fr 1fr;
   gap: 40px;
   padding-bottom: 32px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--mb-ui2);
 }
 .tq-footer-brand {
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: var(--mb-text);
   margin: 0 0 8px;
 }
 .tq-footer-desc {
@@ -904,7 +898,7 @@ const socials: Social[] = [
 .tq-footer-title {
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: var(--mb-text);
   margin: 0 0 4px;
 }
 .tq-footer-col a {
@@ -912,7 +906,7 @@ const socials: Social[] = [
   transition: color 0.2s ease;
 }
 .tq-footer-col a:hover {
-  color: #fff;
+  color: var(--mb-accent);
 }
 .tq-footer-bottom {
   display: flex;
@@ -923,6 +917,23 @@ const socials: Social[] = [
 }
 
 /* ---------- 响应式 ---------- */
+/* 移动端：单列 → 平板：2 列 → 桌面：专区 4 列 / 理由 3 列 */
+@media (min-width: 640px) {
+  .tq-zone-grid,
+  .tq-reason-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tq-zone-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .tq-reason-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .tq-hero {
     min-height: 420px;
@@ -930,10 +941,6 @@ const socials: Social[] = [
   }
   .tq-hero-title {
     font-size: 36px;
-  }
-  .tq-zone-grid,
-  .tq-reason-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -959,10 +966,6 @@ const socials: Social[] = [
   }
   .tq-btn {
     text-align: center;
-  }
-  .tq-zone-grid,
-  .tq-reason-grid {
-    grid-template-columns: 1fr;
   }
   .tq-head-row {
     flex-direction: column;
