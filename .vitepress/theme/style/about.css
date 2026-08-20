@@ -115,7 +115,7 @@ html.about-deck-active body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 48px 56px;
+  padding: 48px 56px 48px 150px;
   box-sizing: border-box;
 }
 
@@ -523,7 +523,7 @@ html.about-deck-active body {
   padding: 11px 34px;
   border-radius: var(--mb-radius-pill);
   background: var(--mb-accent);
-  color: var(--mb-on-accent);
+  color: var(--mb-on-accent) !important;
   border: 1px solid var(--mb-accent);
   font-size: 20px;
   font-weight: 600;
