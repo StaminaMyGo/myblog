@@ -1,81 +1,129 @@
 /* =========================================================
-   myblog · CLAY SURFACE SYSTEM
-   Theme tokens per DESIGN-clay.md
-   配色灵感：Clay.com（奶油画布 + 墨色主按钮 + 饱和彩色卡片）
-   —— Ink 近黑主色 / Cream 暖白画布 / Pink·Teal·Lavender·Peach·Ochre 品牌色板
+   myblog · MINIMAL DESIGN SYSTEM
+   Theme tokens per Minimal-design-analysis.md
+   单一强调色（Action Blue #0066cc）驱动所有交互元素；
+   背景 / 边框 / 文字全部由一组 HSL 三元组派生，
+   浅色与深色模式共用同一套代码路径。
+   无装饰渐变、无 chrome 阴影 —— 只有内容在说话。
    ========================================================= */
 :root {
-  /* 品牌主色：Ink（近黑 · 主 CTA / 标题 / 正文链接） */
-  --mb-primary:        #0a0a0a;
-  --mb-primary-deep:   #1f1f1f;
-  --mb-primary-soft:   rgba(10, 10, 10, 0.08);
-  --mb-primary-border: rgba(10, 10, 10, 0.35);
+  /* --- HSL 基准三元组（Minimal 动态色彩引擎 · 浅色默认值） --- */
+  --mb-base-h: 0;
+  --mb-base-s: 0%;
+  --mb-base-l: 96%;
+  --mb-accent-h: 211;
+  --mb-accent-s: 100%;
+  --mb-accent-l: 40%;
+
+  /* --- 派生色（浅色）：改 base-h/s/l 或 accent-h/s/l 全站自动换色 --- */
+  --mb-bg1: hsl(var(--mb-base-h), var(--mb-base-s), var(--mb-base-l));                        /* 次级背景 */
+  --mb-bg2: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) - 2%));             /* 柔和表面 */
+  --mb-bg3: hsla(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) - 50%), 0.12);     /* 悬停遮罩 */
+  --mb-ui1: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) - 6%));             /* 弱边框 */
+  --mb-ui2: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) - 12%));            /* 中边框 */
+  --mb-ui3: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) - 20%));            /* 强边框 */
+  --mb-tx1: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) - 90%));            /* 正文 */
+  --mb-tx2: hsl(var(--mb-base-h), calc(var(--mb-base-s) - 20%), calc(var(--mb-base-l) - 50%)); /* 次要文字 */
+  --mb-tx3: hsl(var(--mb-base-h), calc(var(--mb-base-s) - 10%), calc(var(--mb-base-l) - 25%)); /* 弱化文字 */
+  --mb-ax1: hsl(var(--mb-accent-h), var(--mb-accent-s), var(--mb-accent-l));                  /* 强调色 */
+  --mb-ax2: #0071e3;                                                                           /* 强调色悬停 */
+  --mb-ax3: hsl(var(--mb-accent-h), var(--mb-accent-s), calc(var(--mb-accent-l) + 6%));       /* 强调色激活 */
+  --mb-ax-rgb: 0, 102, 204;
+
+  /* --- 主色 = 唯一交互色（Action Blue） --- */
+  --mb-primary:        var(--mb-ax1);
+  --mb-primary-deep:   var(--mb-ax2);
+  --mb-primary-soft:   rgba(var(--mb-ax-rgb), 0.08);
+  --mb-primary-border: rgba(var(--mb-ax-rgb), 0.35);
   --mb-on-primary:     #ffffff;
 
-  /* 反馈强调色：Coral 高亮 + Pink 强调（悬停 / 激活） */
-  --mb-accent:        #ff6b5a;
-  --mb-accent-deep:   #ff4d8b;
-  --mb-accent-soft:   rgba(255, 107, 90, 0.12);
-  --mb-accent-border: rgba(255, 77, 139, 0.35);
+  /* --- 强调色（与主色同源，保留旧名以兼容组件） --- */
+  --mb-accent:        var(--mb-ax1);
+  --mb-accent-deep:   var(--mb-ax2);
+  --mb-accent-soft:   rgba(var(--mb-ax-rgb), 0.12);
+  --mb-accent-border: rgba(var(--mb-ax-rgb), 0.35);
   --mb-on-accent:     #ffffff;
 
-  /* 状态反馈色（与 design 语义色一致） */
-  --mb-amber:         #f59e0b;   /* warning */
-  --mb-red:           #ef4444;   /* error */
-  --mb-green:         #22c55e;   /* success */
+  /* 状态反馈色（语义色，不参与换肤） */
+  --mb-amber:  #f59e0b;  /* warning */
+  --mb-red:    #ef4444;  /* error */
+  --mb-green:  #22c55e;  /* success */
 
-  /* Clay 品牌色板（饱和单色卡片） */
-  --mb-brand-pink:      #ff4d8b;
-  --mb-brand-teal:      #1a3a3a;
-  --mb-brand-lavender:  #b8a4ed;
-  --mb-brand-peach:     #ffb084;
-  --mb-brand-ochre:     #e8b94a;
-  --mb-brand-mint:      #a4d4c5;
-  --mb-brand-coral:     #ff6b5a;
-  --mb-on-dark:         #ffffff;
-  --mb-on-dark-soft:    #a0a0a0;
+  /* 深色瓷砖表面（product-tile-dark） */
+  --mb-tile-dark-1:  #272729;
+  --mb-tile-dark-2:  #2a2a2c;
+  --mb-tile-dark-3:  #252527;
+  --mb-on-dark:      #ffffff;
+  --mb-on-dark-soft: #cccccc;
+  --mb-accent-on-dark: #2997ff;
 
-  /* 背景（奶油画布） */
-  --mb-bg:        #fffaf0;   /* canvas：页面地板 */
-  --mb-bg-alt:    #faf5e8;   /* surface-soft：侧边栏 / 顶栏 / 页脚 / CTA 带 */
-  --mb-bg-soft:   #f5f0e0;   /* surface-card：卡片 / 标签 / 悬浮 */
-  --mb-bg-inset:  #faf5e8;   /* surface-soft：代码块浅色底 */
+  /* 背景 */
+  --mb-bg:       #ffffff;          /* background-primary：内容画布 */
+  --mb-bg-alt:   var(--mb-bg1);    /* background-secondary：顶栏/侧栏/页脚 */
+  --mb-bg-soft:  var(--mb-bg2);    /* 标签 / 芯片 / 代码块底 */
+  --mb-bg-inset: var(--mb-bg1);    /* 代码块底色 */
+  --mb-nav-bg:   hsla(var(--mb-base-h), var(--mb-base-s), var(--mb-base-l), 0.9);
 
-  /* 卡片（六屏首页） */
-  --mb-card-bg: #fffaf0;     /* canvas */
+  /* 卡片 */
+  --mb-card-bg: #ffffff;
 
-  /* 边框（hairline） */
-  --mb-border:        #e5e5e5;   /* hairline */
-  --mb-border-soft:   #f0f0f0;   /* hairline-soft */
+  /* 边框（hairline / divider-soft） */
+  --mb-border:      var(--mb-ui2);
+  --mb-border-soft: var(--mb-ui1);
 
-  /* 文本（Ink / Body / Muted） */
-  --mb-text:        #0a0a0a;   /* ink */
-  --mb-text-dim:    #3a3a3a;   /* body */
-  --mb-text-faint:  #6a6a6a;   /* muted */
-  --mb-text-soft:   #9a9a9a;   /* muted-soft：caption / 细字 */
+  /* 文本（Ink / muted / faint） */
+  --mb-text:       #1d1d1f;        /* ink */
+  --mb-text-dim:   var(--mb-tx2);
+  --mb-text-faint: var(--mb-tx2);
+  --mb-text-soft:  var(--mb-tx3);
 
-  /* Clay 圆角尺 */
-  --mb-radius-xs:   6px;
+  /* Minimal 圆角尺 */
+  --mb-radius-xs:   5px;
   --mb-radius-sm:   8px;
-  --mb-radius-md:   12px;   /* 按钮 / 输入框 */
-  --mb-radius-lg:   16px;   /* 内容卡片 */
-  --mb-radius-xl:   24px;   /* 饱和特色卡片 */
-  --mb-radius-pill: 9999px; /* 标签 / 分类 tab */
+  --mb-radius-md:   11px;
+  --mb-radius-lg:   18px;
+  --mb-radius-xl:   18px;
+  --mb-radius-pill: 9999px;
 
   /* 交互时长 */
   --mb-duration-fast: 80ms;
   --mb-duration:      120ms;
 
-  /* 字体栈：正文 Inter；代码 / 终端元素保留等宽（nerd 气质） */
-  --mb-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-             'PingFang SC', 'Microsoft YaHei', sans-serif;
+  /* 字体栈：SF Pro（Apple）+ CJK 回退；代码保留等宽 */
+  --mb-sans: 'SF Pro Display', 'SF Pro Text', system-ui, -apple-system,
+             BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC',
+             'Microsoft YaHei', sans-serif;
   --mb-mono: 'Cascadia Code', 'JetBrains Mono', 'Fira Code', 'Sarasa Mono SC',
              Consolas, 'Courier New', ui-monospace, monospace;
   --mb-mono-cjk: 'Sarasa Mono SC', 'Microsoft YaHei UI', 'PingFang SC',
                  'Microsoft YaHei', sans-serif;
 }
 
-/* 覆盖 VitePress 默认变量（浅色 Clay 主题） */
+/* --- 深色模式：只覆盖 base-l / accent-l 与方向相反的派生公式 --- */
+.dark {
+  --mb-base-l: 15%;
+  --mb-accent-l: 60%;
+
+  --mb-bg3: hsla(0, 0%, 100%, 0.08);
+  --mb-ui1: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) + 6%));
+  --mb-ui2: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) + 12%));
+  --mb-ui3: hsl(var(--mb-base-h), var(--mb-base-s), calc(var(--mb-base-l) + 20%));
+  --mb-tx1: hsl(var(--mb-base-h), calc(var(--mb-base-s) - 10%), calc(var(--mb-base-l) + 67%));
+  --mb-tx2: hsl(var(--mb-base-h), calc(var(--mb-base-s) - 20%), calc(var(--mb-base-l) + 45%));
+  --mb-tx3: hsl(var(--mb-base-h), calc(var(--mb-base-s) - 20%), calc(var(--mb-base-l) + 30%));
+  --mb-ax2: hsl(var(--mb-accent-h), var(--mb-accent-s), calc(var(--mb-accent-l) + 8%));
+  --mb-ax-rgb: 51, 150, 255;
+
+  --mb-bg:       var(--mb-bg1);
+  --mb-bg-alt:   var(--mb-bg2);
+  --mb-bg-soft:  var(--mb-ui1);
+  --mb-bg-inset: var(--mb-bg2);
+  --mb-card-bg:  var(--mb-bg2);
+
+  --mb-text: var(--mb-tx1);
+}
+
+/* 覆盖 VitePress 默认变量（引用 --mb-*，深浅模式自动跟随） */
 :root {
   --vp-c-bg: var(--mb-bg);
   --vp-c-bg-alt: var(--mb-bg-alt);
@@ -92,10 +140,10 @@
   --vp-c-divider: var(--mb-border-soft);
   --vp-c-gutter: var(--mb-bg);
 
-  --vp-c-brand-1: var(--mb-primary);
-  --vp-c-brand-2: var(--mb-accent);
-  --vp-c-brand-3: var(--mb-primary-deep);
-  --vp-c-brand-soft: rgba(255, 107, 90, 0.12);
+  --vp-c-brand-1: var(--mb-accent);
+  --vp-c-brand-2: var(--mb-accent-deep);
+  --vp-c-brand-3: var(--mb-accent);
+  --vp-c-brand-soft: var(--mb-accent-soft);
 
   --vp-c-warning-1: var(--mb-amber);
   --vp-c-warning-2: var(--mb-amber);
@@ -103,12 +151,12 @@
   --vp-c-danger-1: var(--mb-red);
   --vp-c-danger-2: var(--mb-red);
   --vp-c-danger-soft: rgba(239, 68, 68, 0.12);
-  --vp-c-tip-1: var(--mb-accent-deep);
-  --vp-c-tip-2: var(--mb-brand-pink);
-  --vp-c-tip-soft: rgba(255, 77, 139, 0.12);
+  --vp-c-tip-1: var(--mb-accent);
+  --vp-c-tip-2: var(--mb-accent-deep);
+  --vp-c-tip-soft: var(--mb-accent-soft);
 
-  --vp-c-highlight-bg: rgba(255, 77, 139, 0.15);
-  --vp-c-highlight-border: var(--mb-brand-pink);
+  --vp-c-highlight-bg: var(--mb-accent-soft);
+  --vp-c-highlight-border: var(--mb-accent);
 
   --vp-font-family-base: var(--mb-sans), var(--mb-mono-cjk);
   --vp-font-family-mono: var(--mb-mono);

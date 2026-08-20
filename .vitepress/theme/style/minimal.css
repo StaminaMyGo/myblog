@@ -1,7 +1,7 @@
 /* =========================================================
-   myblog · nerd.css
-   CLAY SURFACE SYSTEM · per DESIGN-clay.md
-   （奶油画布 + Ink 墨色主按钮 + 饱和彩色卡片）
+   myblog · minimal.css
+   MINIMAL DESIGN SYSTEM · per Minimal-design-analysis.md
+   （单一强调色 Action Blue + HSL 派生表面 + 深浅共用代码路径）
    ========================================================= */
 
 /* ---------- 基础 ---------- */
@@ -13,7 +13,7 @@ body {
   letter-spacing: 0.01em;
 }
 ::selection {
-  background: rgba(255, 77, 139, 0.22);
+  background: rgba(var(--mb-ax-rgb), 0.22);
   color: var(--mb-text);
 }
 a {
@@ -24,15 +24,15 @@ a {
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--mb-bg-soft); }
 ::-webkit-scrollbar-thumb {
-  background: #d8d2c4;
+  background: var(--mb-ui2);
   border: 2px solid var(--mb-bg);
   border-radius: 6px;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--mb-brand-pink); }
+::-webkit-scrollbar-thumb:hover { background: var(--mb-accent); }
 
-/* ---------- 顶栏（top-nav：奶油色 64px） ---------- */
+/* ---------- 顶栏（top-nav：毛玻璃 64px） ---------- */
 .VPNavBar {
-  background: rgba(255, 250, 240, 0.92) !important;
+  background: var(--mb-nav-bg) !important;
   border-bottom: 1px solid var(--mb-border);
   backdrop-filter: saturate(1.4) blur(8px);
 }
@@ -52,21 +52,21 @@ a {
 }
 .VPNavBarMenuLink.active {
   color: var(--mb-text) !important;
-  border-bottom-color: var(--mb-brand-pink);
+  border-bottom-color: var(--mb-accent);
 }
 
 /* 搜索按钮 */
 .DocSearch-Button {
   background: var(--mb-bg-soft) !important;
   border: 1px solid var(--mb-border) !important;
-  border-radius: 12px !important;
+  border-radius: var(--mb-radius-md) !important;
   transition: border-color var(--mb-duration-fast) ease;
 }
 .DocSearch-Button:hover {
-  border-color: var(--mb-brand-pink) !important;
+  border-color: var(--mb-accent) !important;
 }
 
-/* ---------- 侧边栏（surface-soft） ---------- */
+/* ---------- 侧边栏（secondary 表面） ---------- */
 .VPSidebar {
   background: var(--mb-bg-alt) !important;
   border-right: 1px solid var(--mb-border) !important;
@@ -82,10 +82,10 @@ a {
 }
 .VPSidebarItem.is-active > .item .link::before {
   content: '▸ ';
-  color: var(--mb-brand-pink);
+  color: var(--mb-accent);
 }
 
-/* ---------- 文档区标题（Ink 墨色 + 负字距） ---------- */
+/* ---------- 文档区标题（Ink + 负字距） ---------- */
 .vp-doc h1 {
   font-size: 2em;
   border-bottom: 1px solid var(--mb-border);
@@ -108,33 +108,32 @@ a {
   50%, 100% { opacity: 0; }
 }
 
-/* ---------- 正文链接（text-link：Ink + 下划线） ---------- */
+/* ---------- 正文链接（text-link：唯一强调色） ---------- */
 .vp-doc a {
-  color: var(--mb-text);
+  color: var(--mb-accent);
   text-decoration: none;
-  border-bottom: 1px solid var(--mb-border);
+  border-bottom: 1px solid transparent;
 }
 .vp-doc a:hover {
-  color: var(--mb-accent);
-  border-bottom-color: var(--mb-accent);
+  color: var(--mb-accent-deep);
+  border-bottom-color: var(--mb-accent-deep);
 }
 
-/* ---------- 内联代码（lavender 柔底） ---------- */
+/* ---------- 内联代码（accent-soft 柔底） ---------- */
 .vp-doc :not(pre) > code {
-  background: rgba(184, 164, 237, 0.2);
-  border: 1px solid rgba(184, 164, 237, 0.45);
+  background: var(--mb-accent-soft);
+  border: 1px solid var(--mb-accent-border);
   color: var(--mb-text);
-  border-radius: 6px;
+  border-radius: var(--mb-radius-xs);
   font-size: 0.85em;
   padding: 0.15em 0.4em;
 }
 
-/* ---------- 代码块：奶油底窗口风格（radius-lg） ---------- */
+/* ---------- 代码块：无阴影窗口风格（radius-lg） ---------- */
 .vp-doc div[class*='language-'] {
-  border-radius: 16px;
+  border-radius: var(--mb-radius-lg);
   border: 1px solid var(--mb-border);
   background: var(--mb-bg-inset);
-  box-shadow: 0 2px 10px rgba(10, 10, 10, 0.06);
   margin: 1.2em 0;
 }
 .vp-doc div[class*='language-']::before {
@@ -144,8 +143,8 @@ a {
   left: 14px;
   width: 12px; height: 12px;
   border-radius: 50%;
-  background: #f87171;
-  box-shadow: 20px 0 0 #fbbf24, 40px 0 0 #34d399;
+  background: var(--mb-ui3);
+  box-shadow: 20px 0 0 var(--mb-ui2), 40px 0 0 var(--mb-ui2);
   z-index: 2;
 }
 .vp-doc div[class*='language-'] .lang {
@@ -172,24 +171,24 @@ a {
   user-select: none;
 }
 .vp-doc div[class*='language-'] .vp-code span { transition: none; }
-.vp-doc div[class*='language-']:hover .lang { color: var(--mb-brand-pink); }
+.vp-doc div[class*='language-']:hover .lang { color: var(--mb-accent); }
 
 /* ---------- 引用块 ---------- */
 .vp-doc blockquote {
-  border-left: 3px solid var(--mb-brand-pink);
-  background: rgba(255, 77, 139, 0.05);
-  border-radius: 0 12px 12px 0;
+  border-left: 3px solid var(--mb-accent);
+  background: var(--mb-accent-soft);
+  border-radius: 0 var(--mb-radius-md) var(--mb-radius-md) 0;
   color: var(--mb-text-dim);
   padding: 0.6em 1em;
 }
 
 /* ---------- 提示框 ---------- */
 .vp-doc .custom-block {
-  border-radius: 12px;
+  border-radius: var(--mb-radius-md);
   border-left-width: 3px;
   font-size: 0.95em;
 }
-.vp-doc .custom-block.tip { border-color: var(--mb-brand-pink); }
+.vp-doc .custom-block.tip { border-color: var(--mb-accent); }
 .vp-doc .custom-block.warning { border-color: var(--mb-amber); }
 .vp-doc .custom-block.danger { border-color: var(--mb-red); }
 .vp-doc .custom-block .custom-block-title {
@@ -213,27 +212,27 @@ a {
   color: var(--mb-text);
 }
 
-/* ---------- 按钮（button-primary：Ink 墨色，radius-md） ---------- */
+/* ---------- 按钮（button-primary：强调色胶囊） ---------- */
 .vp-button {
-  border-radius: 12px !important;
+  border-radius: var(--mb-radius-pill) !important;
   font-weight: 600;
   letter-spacing: 0;
   transition: background var(--mb-duration-fast) ease, border-color var(--mb-duration-fast) ease, color var(--mb-duration-fast) ease;
 }
 .vp-button.brand {
-  background: var(--mb-primary) !important;
-  color: var(--mb-on-primary) !important;
-  border: 1px solid var(--mb-primary) !important;
+  background: var(--mb-accent) !important;
+  color: var(--mb-on-accent) !important;
+  border: 1px solid var(--mb-accent) !important;
 }
-.vp-button.brand:hover { background: var(--mb-primary-deep) !important; border-color: var(--mb-primary-deep) !important; }
+.vp-button.brand:hover { background: var(--mb-accent-deep) !important; border-color: var(--mb-accent-deep) !important; }
 .vp-button.alt {
   background: var(--mb-bg) !important;
-  color: var(--mb-text) !important;
+  color: var(--mb-accent) !important;
   border: 1px solid var(--mb-border) !important;
 }
-.vp-button.alt:hover { border-color: var(--mb-brand-pink) !important; }
+.vp-button.alt:hover { border-color: var(--mb-accent) !important; }
 
-/* ---------- 页脚（奶油色 footer，不用深色） ---------- */
+/* ---------- 页脚（secondary 表面） ---------- */
 .VPFooter {
   border-top: 1px solid var(--mb-border-soft);
   background: var(--mb-bg-alt);
@@ -250,7 +249,7 @@ a {
   font-size: 16px;
   font-weight: 700;
 }
-.mb-section-title::before { content: '❯ '; color: var(--mb-brand-pink); }
+.mb-section-title::before { content: '❯ '; color: var(--mb-accent); }
 
 .mb-posts { list-style: none; margin: 12px 0 0; padding: 0; }
 .mb-post {
@@ -289,14 +288,14 @@ a {
   color: var(--mb-text);
   background: var(--mb-bg-soft);
   border: 1px solid var(--mb-border);
-  border-radius: 9999px;
+  border-radius: var(--mb-radius-pill);
   padding: 2px 10px;
   margin-right: 6px;
   font-family: var(--mb-mono);
   transition: background var(--mb-duration-fast) ease, border-color var(--mb-duration-fast) ease, color var(--mb-duration-fast) ease;
 }
 .mb-tag:hover {
-  border-color: var(--mb-brand-pink);
+  border-color: var(--mb-accent);
   color: var(--mb-accent-deep);
 }
 .mb-empty {
@@ -335,12 +334,11 @@ a {
   height: 3px;
   z-index: 1000;
   pointer-events: none;
-  background: rgba(255, 77, 139, 0.12);
+  background: rgba(var(--mb-ax-rgb), 0.12);
 }
 .mb-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--mb-brand-pink), var(--mb-brand-coral));
-  box-shadow: 0 0 8px rgba(255, 77, 139, 0.5);
+  background: var(--mb-accent);
   transition: width 0.1s linear;
 }
 

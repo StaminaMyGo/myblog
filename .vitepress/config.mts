@@ -61,11 +61,11 @@ export default defineConfig({
   cleanUrls: true,
   srcExclude: ['README.md', 'LINK_FIX_REPORT.md', '个人博客PRD.md'],
   lastUpdated: true,
-  appearance: false,
+  appearance: true,
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: base + 'favicon.svg' }],
-    ['meta', { name: 'theme-color', content: '#fffaf0' }],
+    ['meta', { name: 'theme-color', content: '#f5f5f7' }],
     ['script', {}, `
       (function(){function s(){var id=decodeURIComponent(location.hash.slice(1));if(!id)return;var e=document.getElementById(id);if(e){e.scrollIntoView({behavior:'smooth',block:'start'})}}window.addEventListener('hashchange',function(){setTimeout(s,100)});window.addEventListener('load',function(){setTimeout(s,300)})})();
     `],
@@ -200,7 +200,7 @@ export default defineConfig({
 
   markdown: {
     lineNumbers: true,
-    theme: { light: 'github-light', dark: 'github-light' },
+    theme: { light: 'github-light', dark: 'github-dark' },
     image: { lazyLoading: true },
   },
 })

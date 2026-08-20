@@ -5,7 +5,7 @@ import SixScreens from './components/SixScreens.vue'
 import PostsList from './components/PostsList.vue'
 
 import './style/vars.css'
-import './style/nerd.css'
+import './style/minimal.css'
 
 export default {
   extends: DefaultTheme,
