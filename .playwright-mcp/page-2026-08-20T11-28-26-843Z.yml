@@ -1,0 +1,68 @@
+- generic [ref=e3]:
+  - link "Skip to content" [ref=e4] [cursor=pointer]:
+    - /url: "#VPContent"
+  - banner:
+    - generic:
+      - generic:
+        - generic:
+          - link "myblog myblog" [ref=e6] [cursor=pointer]:
+            - /url: /
+            - img "myblog" [ref=e7]
+            - generic [ref=e8]: myblog
+          - generic [ref=e9]:
+            - button "搜索" [ref=e12] [cursor=pointer]:
+              - generic [ref=e16]:
+                - generic [ref=e17]: Ctrl
+                - generic [ref=e18]: K
+            - navigation "Main Navigation" [ref=e19]:
+              - link "首页" [ref=e21] [cursor=pointer]:
+                - /url: /
+              - link "技术分析" [ref=e23] [cursor=pointer]:
+                - /url: /Tech/
+              - link "产品分析" [ref=e25] [cursor=pointer]:
+                - /url: /Product/
+              - link "ACGN 评价" [ref=e27] [cursor=pointer]:
+                - /url: /ACGN/
+              - link "项目复盘" [ref=e29] [cursor=pointer]:
+                - /url: /Project/
+              - link "关于我" [ref=e31] [cursor=pointer]:
+                - /url: /Me/
+            - button "extra navigation" [ref=e34] [cursor=pointer]
+  - generic [ref=e40]:
+    - main [ref=e41]:
+      - region "关于我 · 场景导航" [ref=e44]:
+        - region [ref=e78]:
+          - generic [ref=e79]:
+            - generic [ref=e80]:
+              - text: 05 / 06
+              - heading "与我合作的预期" [level=2] [ref=e81]
+            - generic [ref=e82]:
+              - paragraph [ref=e83]:
+                - generic [ref=e84]: →
+                - generic [ref=e85]: 你将会获得一份把模糊诉求整理成清晰清单的需求拆解
+              - paragraph [ref=e86]:
+                - generic [ref=e87]: →
+                - generic [ref=e88]: 你将会获得可运行的 demo 与可视化结果，而不是口头概念
+              - paragraph [ref=e89]:
+                - generic [ref=e90]: →
+                - generic [ref=e91]: 你将会获得 deadline 前的完整交付和一份可执行的复盘结论
+            - link "查看完整个人介绍 →" [ref=e92] [cursor=pointer]:
+              - /url: /Me/个人介绍
+        - navigation "场景导航" [ref=e57]:
+          - button "第 1 屏：Hero 身份锚点" [ref=e58] [cursor=pointer]
+          - button "第 2 屏：我的转变" [ref=e59] [cursor=pointer]
+          - button "第 3 屏：我的行事准则" [ref=e60] [cursor=pointer]
+          - button "第 4 屏：能力光谱" [ref=e61] [cursor=pointer]
+          - button "第 5 屏：与我合作的预期" [ref=e62] [cursor=pointer]
+          - button "第 6 屏：代表项目" [ref=e63] [cursor=pointer]
+        - generic [ref=e64]: 05 / 06
+        - generic [ref=e65]: 第 5 屏：与我合作的预期
+    - contentinfo [ref=e66]:
+      - paragraph [ref=e69]:
+        - text: "最后更新:"
+        - time [ref=e70]: 2026年8月20日 15:22
+      - navigation "Pager" [ref=e71]:
+        - link "下一篇 个人介绍" [ref=e75] [cursor=pointer]:
+          - /url: /Me/%E4%B8%AA%E4%BA%BA%E4%BB%8B%E7%BB%8D
+          - generic [ref=e76]: 下一篇
+          - generic [ref=e77]: 个人介绍

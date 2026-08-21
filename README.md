@@ -1,6 +1,6 @@
 # myblog
 
-一个 **Clay 奶油风格**的个人博客 / 求职作品集，基于 [VitePress](https://vitepress.dev) 构建，
+一个 **腾讯招聘首页风格**的个人博客 / 求职作品集，基于 [VitePress](https://vitepress.dev) 构建，
 托管在 GitHub Pages，通过 GitHub Actions 实现 **push 即自动部署**。
 
 五个内容专区：
@@ -18,8 +18,8 @@
 ## 技术栈
 
 - **框架**：VitePress 1.6（Vue 3 + Vite 静态站点生成器）
-- **主题**：CLAY SURFACE SYSTEM · Clay 风格配色（奶油画布 `#fffaf0` + Ink 墨色主按钮 + Pink/Teal/Lavender/Peach/Ochre 饱和特色卡片）
-- **首页**：六屏滚动展示（个人简介 / 项目复盘 / 产品分析 / 技术分析 / 自我介绍 / 网站技术栈）
+- **主题**：MINIMAL DESIGN SYSTEM · Minimal 配色令牌（`--mb-*`，主色 `#0052D9`）+ 腾讯招聘首页风格令牌（`--tq-*`：12px 圆角卡片、双层阴影、0.3s 过渡、深色模式适配）
+- **首页**：腾讯招聘风格长滚动页（Hero 品牌区 / 四大内容专区 / 最新动态 / N 个理由 / 关于我轮播 / 社交关注 / 深色页脚）
 - **包管理**：pnpm
 - **CI/CD**：GitHub Actions → GitHub Pages
 - **搜索**：VitePress 本地搜索（minisearch）
@@ -34,8 +34,8 @@ myblog/
 │   ├── posts.data.ts              # 文章数据加载器（自动收集五个专区文章）
 │   └── theme/
 │       ├── index.ts               # 自定义主题入口
-│       ├── components/            # SixScreens / PostsList
-│       └── style/                 # vars.css（配色令牌）+ nerd.css（主题样式）
+│       ├── components/            # TencentHome（腾讯招聘风格首页）/ PostsList
+│       └── style/                 # vars.css（配色令牌）+ minimal.css（主题样式）
 ├── public/                        # favicon、logo
 ├── Tech/                          # 技术分析文章（Markdown）
 ├── Product/                       # 产品分析文章
@@ -43,7 +43,7 @@ myblog/
 ├── Project/                       # 项目复盘文章
 ├── Me/                            # 关于我文章
 ├── news/                          # 时事热点归档（不在导航中）
-├── index.md                       # 首页（六屏展示）
+├── index.md                       # 首页（腾讯招聘风格长滚动页）
 └── about.md                       # 旧关于页（重定向到 /Me/）
 ```
 

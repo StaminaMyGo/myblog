@@ -314,13 +314,23 @@ a {
 .pager-link .title { color: var(--mb-text); }
 
 /* ---------- 首页腾讯风格：全宽内容容器（TencentHome 组件自行 1200px 居中） ---------- */
-.VPDoc:has(.tencent-home) .content-container {
-  max-width: none;
+.VPDoc:has(.tencent-home) {
+  padding: 0 !important;
+}
+.VPDoc:has(.tencent-home) .container {
+  max-width: none !important;
 }
 .VPDoc:has(.tencent-home) .content {
-  padding-left: 0;
-  padding-right: 0;
-  padding-bottom: 0;
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
+}
+.VPDoc:has(.tencent-home) .content-container {
+  max-width: none !important;
+}
+.VPDoc:has(.tencent-home) .VPDocAside {
+  display: none;
 }
 .tencent-home {
   margin-top: 0;
