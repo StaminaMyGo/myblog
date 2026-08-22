@@ -76,5 +76,5 @@ GitHub Pages 能够免费，是因为其 CDN 具备以下条件：
 ## 相关阅读
 
 - [GitHub Pages + CI/CD 实战：让博客自动部署](/Tech/gh-pages-ci) —— Pages 的自动化部署实践
-- [myblog V1 技术架构复盘](/Tech/myblog-V1) —— 基于 GitHub Pages 的个人博客项目复盘
+- [myblog V1 技术架构复盘](/Project/myblog-V1) —— 基于 GitHub Pages 的个人博客项目复盘
 - [VitePress 架构笔记：它到底是怎么工作的](/Tech/vitepress-arch) —— 静态站点生成器的工作原理

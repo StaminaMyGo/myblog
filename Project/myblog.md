@@ -9,7 +9,7 @@ category: Project
 # myblog 项目复盘：DeepSeek 橙白风格个人博客 v1
 
 ::: tip 阅读提示
-本文从**项目复盘视角**介绍 myblog v1，聚焦项目成果、遇到的问题与解决、后续规划；技术架构与选型细节请见 [myblog-V1 技术复盘](/Tech/myblog-V1)。
+本文从**项目复盘视角**介绍 myblog v1，聚焦项目成果、遇到的问题与解决、后续规划；技术架构与选型细节请见 [myblog-V1 技术复盘](/Project/myblog-V1)。
 :::
 
 > **项目名称**：myblog
@@ -347,7 +347,7 @@ GitHub Actions 触发
 
 ## 相关阅读
 
-- [myblog-V1 技术复盘](/Tech/myblog-V1)：同项目的技术架构视角
+- [myblog-V1 技术复盘](/Project/myblog-V1)：同项目的技术架构视角
 - [VitePress 架构笔记](/Tech/vitepress-arch)：拆解 VitePress 的构建与主题机制
 - [GitHub Pages + CI/CD 实战](/Tech/gh-pages-ci)：本博客的自动化部署方案
 - [为什么我沉迷 Markdown](/Tech/markdown-love)：写作理念的延伸阅读

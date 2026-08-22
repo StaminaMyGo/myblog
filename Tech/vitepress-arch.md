@@ -122,5 +122,5 @@ export default createContentLoader(['tech/**/*.md', 'acgn/**/*.md', 'news/**/*.m
 ## 相关阅读
 
 - [GitHub Pages + CI/CD 实战：让博客自动部署](/Tech/gh-pages-ci) —— 构建产物是如何被自动发布到线上的
-- [myblog 项目 v1 说明文档](/Tech/myblog-V1) —— 这些机制在本博客中的完整落地
+- [myblog 项目 v1 说明文档](/Project/myblog-V1) —— 这些机制在本博客中的完整落地
 - [为什么我沉迷 Markdown](/Tech/markdown-love) —— Markdown 写作与渲染生态的由来

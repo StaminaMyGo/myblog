@@ -122,5 +122,5 @@ export default defineConfig({ base })
 ## 相关阅读
 
 - [VitePress 架构笔记：它到底是怎么工作的](/Tech/vitepress-arch) —— 了解构建产物与静态站点生成原理
-- [myblog 项目 v1 说明文档](/Tech/myblog-V1) —— 本博客完整的技术架构复盘
+- [myblog 项目 v1 说明文档](/Project/myblog-V1) —— 本博客完整的技术架构复盘
 - [myblog 项目复盘](/Project/myblog) —— 从项目视角回看整个开发过程

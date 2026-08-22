@@ -16,12 +16,14 @@ const allPosts = posts as unknown as Post[]
 
 /* ---------- 数据 ---------- */
 const CAT_LABELS: Record<string, string> = {
-  tech: '技术分析',
+  tech: '技术笔记',
   product: '产品分析',
   acgn: 'ACGN 评价',
   project: '项目复盘',
+  growth: '成长思考',
+  english: '英语学习',
   me: '关于我',
-  news: '时事热点',
+  news: '资讯观察',
 }
 
 const latestPosts = computed(() => allPosts.slice(0, 8))
@@ -47,7 +49,7 @@ interface Zone {
 const zones: Zone[] = [
   {
     label: 'TECH',
-    title: '技术分析',
+    title: '技术笔记',
     desc: '编程、框架、DevOps 与行业猜想，把踩过的坑写成文档。',
     link: '/Tech/',
     icon: 'm16 18 6-6-6-6M8 6l-6 6 6 6',
@@ -72,6 +74,20 @@ const zones: Zone[] = [
     desc: '每一个项目都是一次完整的从 0 到 1 与复盘。',
     link: '/Project/',
     icon: 'm12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83ZM22 17.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65',
+  },
+  {
+    label: 'GROWTH',
+    title: '成长思考',
+    desc: '职场、成长与学习方法，记录从考研到产品路上的思考。',
+    link: '/Growth/',
+    icon: 'M22 7l-8.5 8.5-5-5L2 17M16 7h6v6',
+  },
+  {
+    label: 'ENGLISH',
+    title: '英语学习',
+    desc: '听说、口语面试与雅思备考的方法与语料积累。',
+    link: '/English/',
+    icon: 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z',
   },
 ]
 
@@ -379,10 +395,12 @@ const socials: Social[] = [
           </div>
           <div class="tq-footer-col">
             <p class="tq-footer-title">内容专区</p>
-            <a :href="withBase('/Tech/')">技术分析</a>
+            <a :href="withBase('/Tech/')">技术笔记</a>
             <a :href="withBase('/Product/')">产品分析</a>
             <a :href="withBase('/ACGN/')">ACGN 评价</a>
             <a :href="withBase('/Project/')">项目复盘</a>
+            <a :href="withBase('/Growth/')">成长思考</a>
+            <a :href="withBase('/English/')">英语学习</a>
             <a :href="withBase('/Me/')">关于我</a>
           </div>
           <div class="tq-footer-col">
