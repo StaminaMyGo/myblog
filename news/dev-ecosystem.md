@@ -1,13 +1,9 @@
 ---
-title: "20260810-开发者生态观察：静态站与 SSG 的文艺复兴"
-category: news
----
-
-﻿---
-title: 开发者生态观察：静态站与 SSG 的文艺复兴
+title: "20260720-开发者生态观察：静态站与 SSG 的文艺复兴"
 description: 为什么个人博客又回到了"Markdown + 静态部署"的老路上。
 date: 2026-07-20
 tags: [开发者生态, SSG, 博客]
+category: news
 ---
 
 # 开发者生态观察：静态站与 SSG 的文艺复兴

@@ -1,13 +1,9 @@
 ---
-title: "20260810-2026-08 AI 大模型动态"
-category: news
----
-
-﻿---
-title: 2026-08 AI 大模型动态
+title: "20260805-2026-08 AI 大模型动态"
 description: 本月值得关注的 AI 进展：开源模型、推理成本与应用落地。
 date: 2026-08-05
 tags: [AI, 大模型, 行业观察]
+category: news
 ---
 
 # 2026-08 AI 大模型动态
