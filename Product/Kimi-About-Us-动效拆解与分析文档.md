@@ -1,5 +1,5 @@
 ---
-title: "20260820-20260820-Kimi「About Us」页面动效拆解与分析"
+title: "20260820-Kimi「About Us」页面动效拆解与分析"
 description: 基于 Playwright 取证的 Kimi 团队介绍页动效逆向分析，含技术栈、核心机制与复刻蓝图，用于个人博客 About Me 页复现。
 date: 2026-08-20
 tags:
