@@ -18,12 +18,14 @@ const props = withDefaults(
 )
 
 const CATS: Record<string, { label: string; icon: string }> = {
-  tech: { label: '技术分析', icon: '🖥️' },
+  tech: { label: '技术笔记', icon: '🖥️' },
   product: { label: '产品分析', icon: '📱' },
   acgn: { label: 'ACGN 评价', icon: '🎮' },
   project: { label: '项目复盘', icon: '🧩' },
+  growth: { label: '成长思考', icon: '🌱' },
+  english: { label: '英语学习', icon: '📚' },
   me: { label: '关于我', icon: '👤' },
-  news: { label: '时事热点（归档）', icon: '📡' },
+  news: { label: '资讯观察（归档）', icon: '📡' },
 }
 
 const filtered = computed<Post[]>(() => {

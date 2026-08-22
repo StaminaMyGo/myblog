@@ -15,6 +15,8 @@ export default createContentLoader(
     'Product/**/*.md',
     'ACGN/**/*.md',
     'Project/**/*.md',
+    'Growth/**/*.md',
+    'English/**/*.md',
     'Me/**/*.md',
     'news/**/*.md',
   ],
