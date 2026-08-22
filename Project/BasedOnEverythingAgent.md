@@ -1,5 +1,5 @@
 ---
-title: Everything Agent — 自然语言文件检索 Agent
+title: "20260815-Everything Agent — 自然语言文件检索 Agent"
 description: 基于 DeepSeek 大模型与 Everything 本地索引的 Windows 文件检索智能体，实测命中率 86%。
 date: 2026-08-15
 tags: [项目复盘, AI Agent, DeepSeek, 本地检索, Windows]

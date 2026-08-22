@@ -1,8 +1,9 @@
 ---
-title: VitePress 架构笔记：它到底是怎么工作的
+title: "20260809-VitePress 架构笔记：它到底是怎么工作的"
 description: 拆解 VitePress 的构建流程、主题机制与内容加载方式。
 date: 2026-08-09
 tags: [VitePress, Vue, 前端架构]
+category: Tech
 ---
 
 # VitePress 架构笔记：它到底是怎么工作的

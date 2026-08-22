@@ -1,5 +1,5 @@
 ---
-title: LifeTracker 项目分析报告
+title: "20260815-LifeTracker 项目分析报告"
 description: 跨端番茄钟时间管理应用复盘：洋葱架构、游戏化成长系统与多端打包能力，v1 至 v4 迭代总结。
 date: 2026-08-15
 tags: [项目复盘, Vue 3, TypeScript, 番茄钟, 洋葱架构, PWA]

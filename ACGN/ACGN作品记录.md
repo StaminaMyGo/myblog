@@ -1,8 +1,9 @@
 ---
-title: ACGN 作品记录
+title: "20260704-ACGN 作品记录"
 description: 按年份整理的动漫、漫画、Galgame、主机游戏、手游、格斗游戏、射击游戏与轻小说等 ACGN 作品观看与游玩记录。
 date: 2026-07-04
 tags: [ACGN, 记录, 动漫, 游戏, 漫画]
+category: ACGN
 ---
 
 # ACGN 作品记录

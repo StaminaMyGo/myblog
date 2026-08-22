@@ -1,8 +1,9 @@
 ---
-title: 轻音乐 · ACG
+title: "20260530-轻音乐 · ACG"
 description: 个人收藏的 ACG 相关轻音乐与配乐清单：Galgame 原声、动画配乐与古典纯音乐。
 date: 2026-05-30
 tags: [ACGN, 音乐, 轻音乐, 收藏]
+category: ACGN
 ---
 
 # 轻音乐 · ACG

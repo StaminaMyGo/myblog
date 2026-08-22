@@ -1,5 +1,5 @@
 ---
-title: Bash 语法速查
+title: "20260820-Bash 语法速查"
 description: Bash 基础语法与高频命令速查表，涵盖核心哲学、命令分类、组合符、变量与脚本基础。
 date: 2026-08-20
 tags: [Bash, Shell, Linux, 命令行, 学习笔记]

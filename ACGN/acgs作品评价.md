@@ -1,8 +1,9 @@
 ---
-title: Galgame 游玩记录与评价
+title: "20260425-Galgame 游玩记录与评价"
 description: 少女领域、败犬女主、《玩乐关系》、次元错误恋人、《想要传达给你的爱恋》、《爱因斯坦携爱敬上》、《清澄如镜水面之上》等作品的游玩感受、优缺点与吐槽。
 date: 2026-04-25
 tags: [ACGN, Galgame, 评价, 记录]
+category: ACGN
 ---
 
 # Galgame 游玩记录与评价

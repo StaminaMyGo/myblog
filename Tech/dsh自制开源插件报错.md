@@ -1,5 +1,5 @@
 ---
-title: dsh 自制开源插件加载报错排查记录
+title: "20260820-dsh 自制开源插件加载报错排查记录"
 description: 记录 @dsh-external/dsh-super-injector 运行时注入机制导致 dsh-prompt-tags 插件 404 加载失败的完整排查与修复过程。
 date: 2026-08-20
 tags: [插件系统, 排障记录, 环境配置, dsh]

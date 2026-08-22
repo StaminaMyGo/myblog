@@ -1,5 +1,5 @@
 ---
-title: Agent 项目的评判标准：以文件检索项目为例
+title: "20260819-Agent 项目的评判标准：以文件检索项目为例"
 description: 从感知、规划、工具调用、循环、记忆、反思等维度拆解“真正 Agent”的评判标准，并以 Everything 文件检索项目为例逐项评估。
 date: 2026-08-19
 tags:
@@ -9,6 +9,7 @@ tags:
   - LangChain
   - LangGraph
   - Everything
+category: Tech
 ---
 
 # Agent 项目的评判标准：以文件检索项目为例

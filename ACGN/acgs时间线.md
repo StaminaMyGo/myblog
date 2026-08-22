@@ -1,8 +1,9 @@
 ---
-title: ACGS 时间线
+title: "20260504-ACGS 时间线"
 description: 2026 年 5 月起 Galgame（gal）与动画（ani）的游玩与观看时间线记录。
 date: 2026-05-04
 tags: [ACGN, Galgame, 动画, 记录]
+category: ACGN
 ---
 
 # ACGS 时间线

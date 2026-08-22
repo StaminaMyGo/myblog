@@ -1,8 +1,9 @@
 ---
-title: myblog 项目 v1 说明文档
+title: "20260815-20260815-myblog 项目 v1 说明文档"
 description: myblog v1 技术架构复盘：DeepSeek 橙白风格 VitePress 静态博客的选型、设计与实现。
 date: 2026-08-15
 tags: [VitePress, 项目复盘, 前端, DevOps]
+category: Project
 ---
 
 # myblog 项目 v1 说明文档

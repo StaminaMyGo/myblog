@@ -1,5 +1,5 @@
 ---
-title: 下一代人工智能产品 DNA 走向
+title: "20260822-下一代人工智能产品 DNA 走向"
 description: 从认知记忆架构、HTML 即 Markdown 到数字共生体，解析下一代 AI 产品的三大核心 DNA 特征与产品转化路径。
 date: 2026-08-22
 tags:
@@ -7,6 +7,7 @@ tags:
   - 产品分析
   - 交互范式
   - 认知架构
+category: Product
 ---
 
 # 下一代人工智能产品 DNA 走向

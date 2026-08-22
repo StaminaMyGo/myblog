@@ -1,8 +1,9 @@
 ---
-title: 为什么我沉迷 Markdown
+title: "20260808-为什么我沉迷 Markdown"
 description: Markdown 的极简哲学：专注内容，工具退后。
 date: 2026-08-08
 tags: [Markdown, 写作, 效率]
+category: Tech
 ---
 
 # 为什么我沉迷 Markdown

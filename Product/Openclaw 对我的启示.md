@@ -1,8 +1,9 @@
 ---
-title: OpenClaw 对我的启示：从问答到行动的 AI 范式转变
+title: "20260718-OpenClaw 对我的启示：从问答到行动的 AI 范式转变"
 description: OpenClaw 让 AI 从知识问答走向现实行动：梳理应用场景、商业变现、效率红利与隐私代价。
 date: 2026-07-18
 tags: [AI, OpenClaw, Agent, 范式转变]
+category: Product
 ---
 
 # OpenClaw 对我的启示：从问答到行动的 AI 范式转变

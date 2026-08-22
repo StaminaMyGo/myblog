@@ -1,5 +1,5 @@
 ---
-title: TimeLine 个人学习时间线 — 产品需求文档（PRD）
+title: "20260815-TimeLine 个人学习时间线 — 产品需求文档（PRD）"
 description: 以 AI 辅助全栈开发打造的双线学习时间线 PWA：云端同步、个人博客展示与 Clay 设计系统。
 date: 2026-08-15
 tags: [项目复盘, Vue 3, TypeScript, Supabase, PWA, PRD]

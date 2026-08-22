@@ -1,8 +1,9 @@
 ---
-title: Galgame 会社与剧本：clochette 与新岛夕
+title: "20260504-Galgame 会社与剧本：clochette 与新岛夕"
 description: 从会社与剧本作者视角出发的 Galgame 笔记：clochette（巧克力社）的别名与印象，以及脚本作家新岛夕的代表作品清单。
 date: 2026-05-04
 tags: [ACGN, Galgame, 会社, 剧本, 笔记]
+category: ACGN
 ---
 
 # Galgame 会社与剧本：clochette 与新岛夕

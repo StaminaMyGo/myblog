@@ -1,8 +1,9 @@
 ---
-title: 对 AI 不同发展阶段的猜想
+title: "20260812-对 AI 不同发展阶段的猜想"
 description: 从程序化工作流替代到 AI 接管世界，一次关于 AI 演进路径的大胆推演。
 date: 2026-08-12
 tags: [AI, 科技展望, 思考]
+category: Tech
 ---
 
 # 对 AI 不同发展阶段的猜想

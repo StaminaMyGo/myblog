@@ -1,8 +1,9 @@
 ---
-title: 型月 × 飞碟社 × FGO 制作公司：Fate 帝国的权力三角
+title: "20260602-型月 × 飞碟社 × FGO 制作公司：Fate 帝国的权力三角"
 description: 拆解型月（TYPE-MOON）、飞碟社（ufotable）与 FGO 制作公司（Lasengle）三家公司之间的关系，以及幕后操盘手 Aniplex 的商业闭环。
 date: 2026-06-02
 tags: [ACGN, 型月, 飞碟社, FGO, Fate]
+category: ACGN
 ---
 
 # 型月 × 飞碟社 × FGO 制作公司：Fate 帝国的权力三角

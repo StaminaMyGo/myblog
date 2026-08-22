@@ -1,8 +1,9 @@
 ---
-title: Switch 模拟器（Eden）键盘键位设置指南
+title: "20260602-Switch 模拟器（Eden）键盘键位设置指南"
 description: 让 Switch 模拟器支持完整键盘操作的键位映射教程：进入设置、逐键绑定、推荐键位方案与常见问题。
 date: 2026-06-02
 tags: [ACGN, Switch, 模拟器, 教程]
+category: ACGN
 ---
 
 # Switch 模拟器（Eden）键盘键位设置指南

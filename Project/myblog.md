@@ -1,5 +1,5 @@
 ---
-title: myblog 项目复盘：DeepSeek 橙白风格个人博客 v1
+title: "20260815-myblog 项目复盘：DeepSeek 橙白风格个人博客 v1"
 description: myblog v1 项目复盘：VitePress + GitHub Pages 零成本静态博客，重点记录成果、问题排查与后续规划。
 date: 2026-08-15
 tags: [项目复盘, VitePress, GitHub Pages, CI/CD, 个人博客]

@@ -1,8 +1,9 @@
 ---
-title: Steam 折扣节点与 2026 促销时间表
+title: "20260602-Steam 折扣节点与 2026 促销时间表"
 description: Steam 全年四次大型季节性特卖与主题促销的折扣节点整理，含 2026 年主要折扣活动时间表与购物建议。
 date: 2026-06-02
 tags: [ACGN, Steam, 游戏, 省钱, 攻略]
+category: ACGN
 ---
 
 # Steam 折扣节点与 2026 促销时间表

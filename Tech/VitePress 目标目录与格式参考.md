@@ -1,5 +1,5 @@
 ---
-title: VitePress 目标目录与格式参考
+title: "20260819-VitePress 目标目录与格式参考"
 description: 个人博客 VitePress 项目的目标目录结构、文章格式要求与内容分类参考。
 date: 2026-08-19
 tags:
@@ -7,6 +7,7 @@ tags:
   - 个人博客
   - 排版规范
   - 参考文档
+category: Tech
 ---
 
 # VitePress 目标目录与格式参考

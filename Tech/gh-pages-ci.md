@@ -1,8 +1,9 @@
 ---
-title: GitHub Pages + CI/CD 实战：让博客自动部署
+title: "20260810-GitHub Pages + CI/CD 实战：让博客自动部署"
 description: 从零配置 GitHub Actions，push 后自动构建并发布到 GitHub Pages。
 date: 2026-08-10
 tags: [DevOps, GitHub Actions, CI/CD, VitePress]
+category: Tech
 ---
 
 # GitHub Pages + CI/CD 实战：让博客自动部署

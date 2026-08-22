@@ -1,5 +1,5 @@
 ---
-title: 为什么 GitHub Pages 是“免费”的？
+title: "20260819-为什么 GitHub Pages 是“免费”的？"
 description: 从边际成本、CDN 规模效应、自动化调度、开源流量与协议优化等角度，解释 GitHub Pages 免费服务的底层商业逻辑。
 date: 2026-08-19
 tags:
@@ -8,6 +8,7 @@ tags:
   - 边际成本
   - 技术分析
   - DevOps
+category: Tech
 ---
 
 # 为什么 GitHub Pages 是“免费”的？
