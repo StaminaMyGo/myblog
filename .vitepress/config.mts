@@ -70,7 +70,7 @@ export default defineConfig({
   lang: 'zh-CN',
   base,
   cleanUrls: true,
-  srcExclude: ['README.md', 'LINK_FIX_REPORT.md', '个人博客PRD.md', 'About-Me-重构界面与动效需求说明.md'],
+  srcExclude: ['README.md'],
   lastUpdated: true,
   appearance: true,
 
