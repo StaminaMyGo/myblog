@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
 
@@ -32,13 +32,29 @@ function readTagFromUrl(): string {
 }
 
 const selected = ref(readTagFromUrl())
+const listAnchor = ref<HTMLElement>()
+
+/** 标签云可高达 2000px+，选中后文章列表位于视口之外，用户会误以为“没跳转”；
+ * 选中非空标签（点击切换 / 直链进入 / 后退前进）后平滑滚动到列表顶部。
+ * 注意：VitePress loadPage 在其 nextTick 里执行 window.scrollTo(0,0)，会打断平滑滚动，
+ * 因此延迟一帧级时间待其重置完成后滚动，避免竞态。 */
+async function scrollToList() {
+  await nextTick()
+  setTimeout(() => {
+    listAnchor.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, 120)
+}
 
 /** 响应 SPA 内标签切换与浏览器前进/后退 */
 function syncFromUrl() {
-  selected.value = readTagFromUrl()
+  const t = readTagFromUrl()
+  if (t === selected.value) return
+  selected.value = t
+  if (t) scrollToList()
 }
 
 onMounted(() => {
+  if (selected.value) scrollToList()
   window.addEventListener('popstate', syncFromUrl)
   window.addEventListener('mb-urlchange', syncFromUrl)
 })
@@ -68,13 +84,20 @@ function clearSel() {
         <button v-if="selected" type="button" class="tags-clear" @click="clearSel">✕ 清除筛选</button>
       </div>
 
-      <PostsList v-if="selected" :tag="selected" :page-size="50" />
+      <div v-if="selected" ref="listAnchor" class="tags-list">
+        <PostsList :tag="selected" :page-size="50" />
+      </div>
       <p v-else class="tags-hint">共 {{ tagCounts.length }} 个标签 · 点击标签查看相关文章</p>
     </div>
   </ClientOnly>
 </template>
 
 <style scoped>
+.tags-list {
+  /* 顶栏 64px + 呼吸留白，滚动定位时不被吸顶导航遮住 */
+  scroll-margin-top: 88px;
+}
+
 .tags-cloud {
   display: flex;
   flex-wrap: wrap;

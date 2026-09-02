@@ -117,7 +117,9 @@ function onInputKey(e: KeyboardEvent) {
 }
 
 function go(item: { link: string }) {
-  router.go(item.link)
+  // config.nav 的 link 是相对站点根的原始路径（不含 base），
+  // 而 VitePress Router.go() 不会自动拼接 base——缺失时 pushState 会到站点根导致 404。
+  router.go(withBase(item.link))
   close()
 }
 
