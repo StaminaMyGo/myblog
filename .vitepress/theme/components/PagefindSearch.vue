@@ -116,10 +116,10 @@ function onInputKey(e: KeyboardEvent) {
   }
 }
 
-function go(item: { link: string }) {
-  // config.nav 的 link 是相对站点根的原始路径（不含 base），
-  // 而 VitePress Router.go() 不会自动拼接 base——缺失时 pushState 会到站点根导致 404。
-  router.go(withBase(item.link))
+function go(item: { link: string; type: 'nav' | 'page' }) {
+  // nav 快捷项的 link 来自 config.nav（不含 base，如 /Tech/），VitePress Router.go() 不拼 base → 需 withBase；
+  // Pagefind 返回的文章 url 已含 base（如 /myblog/Tech/xxx），再加会导致双重 base 404。
+  router.go(item.type === 'nav' ? withBase(item.link) : item.link)
   close()
 }
 
