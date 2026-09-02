@@ -6,10 +6,14 @@
   "description": "A nerd-style personal blog built with VitePress, deployed on GitHub Pages.",
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "build": "vitepress build && pagefind --site .vitepress/dist",
+    "preview": "vitepress preview",
+    "new": "node scripts/new-post.mjs",
+    "check": "node scripts/check.mjs"
   },
   "devDependencies": {
+    "@pagefind/default-ui": "^1.5.2",
+    "pagefind": "^1.5.2",
     "vitepress": "^1.6.4"
   }
 }

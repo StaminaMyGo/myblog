@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { withBase } from 'vitepress'
+import { useRoute, useRouter, withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
 
 interface Post {
@@ -9,13 +9,17 @@ interface Post {
   title: string
   date: string
   tags: string[]
+  series: string
   excerpt: string
 }
 
 const props = withDefaults(
-  defineProps<{ category?: string; limit?: number; grouped?: boolean }>(),
-  { category: '', limit: 0, grouped: false },
+  defineProps<{ category?: string; tag?: string; limit?: number; grouped?: boolean; pageSize?: number }>(),
+  { category: '', tag: '', limit: 0, grouped: false, pageSize: 20 },
 )
+
+const route = useRoute()
+const router = useRouter()
 
 const CATS: Record<string, { label: string; icon: string }> = {
   tech: { label: '技术笔记', icon: '🖥️' },
@@ -28,16 +32,72 @@ const CATS: Record<string, { label: string; icon: string }> = {
   news: { label: '资讯观察（归档）', icon: '📡' },
 }
 
+/* ---------- 数据过滤 ---------- */
+const allPosts = posts as unknown as Post[]
+
 const filtered = computed<Post[]>(() => {
-  let list = posts as unknown as Post[]
+  let list = allPosts
   if (props.category) list = list.filter((p) => p.category === props.category)
-  if (props.limit) list = list.slice(0, props.limit)
+  if (props.tag) list = list.filter((p) => p.tags.includes(props.tag))
   return list
 })
 
+/* ---------- 年份筛选（仅非分组模式） ---------- */
+const years = computed<string[]>(() => {
+  const set = new Set<string>()
+  for (const p of filtered.value) {
+    const y = p.date.slice(0, 4)
+    if (y) set.add(y)
+  }
+  return Array.from(set).sort().reverse()
+})
+
+const activeYear = computed<string>(() => {
+  const v = String(route.query?.year || '')
+  return years.value.includes(v) ? v : ''
+})
+
+const byYear = computed<Post[]>(() =>
+  activeYear.value ? filtered.value.filter((p) => p.date.startsWith(activeYear.value)) : filtered.value,
+)
+
+/* ---------- 分页（每页 pageSize 篇，URL 里的 ?page=N 可分享） ---------- */
+const currentPage = computed(() => {
+  const n = parseInt(String(route.query?.page || '1'), 10)
+  return Number.isNaN(n) || n < 1 ? 1 : n
+})
+
+const totalPages = computed(() => Math.max(1, Math.ceil(byYear.value.length / props.pageSize)))
+
+const paged = computed<Post[]>(() => {
+  if (props.grouped) return byYear.value
+  const start = (currentPage.value - 1) * props.pageSize
+  return byYear.value.slice(start, start + props.pageSize)
+})
+
+function setQuery(patch: Record<string, string | number | undefined>) {
+  const prev = (route.query ?? {}) as Record<string, string | number>
+  const query: Record<string, string | number> = {}
+  for (const [k, v] of Object.entries({ ...prev, ...patch })) {
+    if (v !== undefined && v !== '' && v !== 1) query[k] = v
+  }
+  router.replace({ path: route.path, query })
+  if (typeof window !== 'undefined') window.scrollTo({ top: 0 })
+}
+
+function goPage(n: number) {
+  if (n < 1 || n > totalPages.value) return
+  setQuery({ page: n === 1 ? undefined : n })
+}
+
+function pickYear(y: string) {
+  setQuery({ year: y || undefined, page: undefined })
+}
+
+/* ---------- 分组模式（保持原有行为） ---------- */
 const groups = computed(() => {
   const map = new Map<string, Post[]>()
-  for (const p of posts as unknown as Post[]) {
+  for (const p of allPosts) {
     if (!map.has(p.category)) map.set(p.category, [])
     map.get(p.category)!.push(p)
   }
@@ -77,17 +137,122 @@ function fmtDate(iso: string): string {
       </section>
     </template>
 
-    <ul v-else class="mb-posts">
-      <li v-for="p in filtered" :key="p.url" class="mb-post">
-        <span class="mb-post-date">{{ fmtDate(p.date) }}</span>
-        <div class="mb-post-main">
-          <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
-          <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
-          <div v-if="p.tags.length" class="mb-tags">
-            <span v-for="t in p.tags" :key="t" class="mb-tag"># {{ t }}</span>
+    <template v-else>
+      <!-- 年份筛选 -->
+      <div v-if="years.length > 1" class="mb-filters">
+        <button
+          type="button"
+          class="mb-chip"
+          :class="{ active: !activeYear }"
+          @click="pickYear('')"
+        >全部 · {{ filtered.length }} 篇</button>
+        <button
+          v-for="y in years"
+          :key="y"
+          type="button"
+          class="mb-chip"
+          :class="{ active: activeYear === y }"
+          @click="pickYear(y)"
+        >{{ y }}</button>
+      </div>
+
+      <ul class="mb-posts">
+        <li v-for="p in paged" :key="p.url" class="mb-post">
+          <span class="mb-post-date">{{ fmtDate(p.date) }}</span>
+          <div class="mb-post-main">
+            <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
+            <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
+            <div v-if="p.tags.length" class="mb-tags">
+              <span v-for="t in p.tags" :key="t" class="mb-tag"># {{ t }}</span>
+            </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+
+      <!-- 分页器 -->
+      <nav v-if="totalPages > 1" class="mb-pager" aria-label="分页">
+        <button type="button" class="mb-pager-btn" :disabled="currentPage <= 1" @click="goPage(currentPage - 1)">
+          上一页
+        </button>
+        <span class="mb-pager-info">第 {{ Math.min(currentPage, totalPages) }} / {{ totalPages }} 页</span>
+        <button
+          type="button"
+          class="mb-pager-btn"
+          :disabled="currentPage >= totalPages"
+          @click="goPage(currentPage + 1)"
+        >
+          下一页
+        </button>
+      </nav>
+    </template>
   </div>
 </template>
+
+<style scoped>
+.mb-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.mb-chip {
+  border: 1px solid var(--mb-ui3, #e0e0e0);
+  background: transparent;
+  color: var(--mb-text, #333);
+  border-radius: 9999px;
+  padding: 4px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mb-chip:hover {
+  border-color: var(--mb-accent, #0052d9);
+  color: var(--mb-accent, #0052d9);
+}
+
+.mb-chip.active {
+  background: var(--mb-accent, #0052d9);
+  border-color: var(--mb-accent, #0052d9);
+  color: #fff;
+}
+
+.mb-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--mb-ui3, #e0e0e0);
+}
+
+.mb-pager-btn {
+  border: 1px solid var(--mb-ui3, #e0e0e0);
+  background: transparent;
+  color: var(--mb-text, #333);
+  border-radius: 6px;
+  padding: 6px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mb-pager-btn:hover:not(:disabled) {
+  border-color: var(--mb-accent, #0052d9);
+  color: var(--mb-accent, #0052d9);
+}
+
+.mb-pager-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.mb-pager-info {
+  font-size: 13px;
+  font-family: var(--mb-mono, monospace);
+  color: var(--mb-ui2, #999);
+}
+</style>

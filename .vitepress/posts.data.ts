@@ -6,6 +6,7 @@ interface PostMeta {
   title: string
   date: string
   tags: string[]
+  series: string
   excerpt: string
 }
 
@@ -31,6 +32,7 @@ export default createContentLoader(
           title: (frontmatter.title as string) || url,
           date: frontmatter.date ? new Date(String(frontmatter.date)).toISOString() : '',
           tags: (frontmatter.tags as string[]) || [],
+          series: (frontmatter.series as string) || '',
           excerpt: (frontmatter.description as string) || (frontmatter.excerpt as string) || '',
         }))
         .sort((a, b) => (a.date < b.date ? 1 : -1))
