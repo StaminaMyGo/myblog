@@ -124,7 +124,7 @@ chmod +x hello.sh
 ./hello.sh
 ```
 
-::: note 运行方式
+::: info 运行方式
 - `./hello.sh`：以文件内容中的 shebang 指定的解释器运行，需要可执行权限
 - `bash hello.sh`：显式指定解释器运行，不需要可执行权限
 :::

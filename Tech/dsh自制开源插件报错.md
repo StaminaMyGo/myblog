@@ -53,7 +53,7 @@ rm node_modules/dsh-prompt-tags
 pm2 restart dsh-web
 ```
 
-::: note 说明
+::: info 说明
 具体命令路径需按实际部署环境调整，以上为操作流程示意。Windows 环境下软链操作可通过 `cmd /c rmdir` 或 `Remove-Item` 完成。
 :::
 
