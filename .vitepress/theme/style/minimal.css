@@ -364,3 +364,10 @@ a {
 @media (max-width: 640px) {
   body { font-size: 14px; }
 }
+
+/* ---------- 搜索：隐藏无效插槽残留的空壳 ----------
+   VitePress 1.6.4 的 VPNavBarSearch 因未配置 search.provider 而渲染为空 <div>，
+   其内部仅有注释节点，:empty 可匹配，隐藏后避免顶栏中部留白。 */
+.VPNavBarSearch:empty {
+  display: none;
+}

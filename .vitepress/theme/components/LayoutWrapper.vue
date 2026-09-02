@@ -6,7 +6,7 @@ import PostTags from './PostTags.vue'
 
 <template>
   <DefaultTheme.Layout>
-    <template #navbar-search>
+    <template #nav-bar-content-after>
       <PagefindSearch />
     </template>
     <template #nav-screen-content-after>
