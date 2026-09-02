@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { withBase } from 'vitepress'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useRoute, withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
 
 interface Post {
@@ -34,10 +34,18 @@ function syncFromUrl() {
   selected.value = readTagFromUrl()
 }
 
+const route = useRoute()
 const selected = ref(readTagFromUrl())
 
+// 首屏 + 标签页内 SPA 切换标签都会触发；immediate 覆盖初始进入。
+// SSR 阶段 route.query 为 undefined，用 ?. 兜底；客户端为响应式对象。
+watch(
+  () => route.query?.tag,
+  (t) => { selected.value = typeof t === 'string' ? t : '' },
+  { immediate: true },
+)
+
 onMounted(() => {
-  syncFromUrl()
   window.addEventListener('popstate', syncFromUrl)
 })
 onBeforeUnmount(() => window.removeEventListener('popstate', syncFromUrl))
