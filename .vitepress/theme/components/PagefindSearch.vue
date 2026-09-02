@@ -1,13 +1,94 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
-import { withBase } from 'vitepress'
-import '@pagefind/default-ui/css/ui.css'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { useData, useRouter, withBase } from 'vitepress'
 
 const props = withDefaults(defineProps<{ mobile?: boolean }>(), { mobile: false })
 
+const { theme } = useData()
+const router = useRouter()
+
+// 顶栏导航即「快捷跳转」数据源（分类 / 标签 / 归档 / 首页），与 config.mts 的 nav 同步
+const navItems = computed(() =>
+  ((theme.value.nav ?? []) as { text?: string; link?: string }[])
+    .filter((i) => i.link)
+    .map((i) => ({ text: i.text ?? i.link!, link: i.link! })),
+)
+const navFiltered = computed(() => {
+  const q = query.value.trim().toLowerCase()
+  if (!q) return navItems.value
+  return navItems.value.filter((i) => i.text.toLowerCase().includes(q))
+})
+
 const open = ref(false)
-const root = ref<HTMLElement>()
-let pagefindUI: { destroy?: () => void } | null = null
+const query = ref('')
+const active = ref(0)
+const loading = ref(false)
+const inputEl = ref<HTMLInputElement>()
+const pagefindReady = ref(false)
+const pagefindError = ref(false)
+let pagefindMod: { init?: (o?: Record<string, unknown>) => Promise<void>; search: (q: string) => Promise<{ results: { data: () => Promise<Record<string, any>> }[] }> } | null = null
+let timer: ReturnType<typeof setTimeout> | undefined
+
+// 文章搜索结果（Pagefind）
+const articles = ref<{ type: 'page'; text: string; link: string; excerpt: string }[]>([])
+
+// 合并列表：快捷跳转在前，文章结果在后，active 索引跨两者
+const combined = computed(() => [
+  ...navFiltered.value.map((i) => ({ type: 'nav' as const, text: i.text, link: i.link, excerpt: '' })),
+  ...articles.value,
+])
+
+async function ensurePagefind() {
+  if (pagefindReady.value || pagefindError.value) return
+  try {
+    // 运行时加载构建产物中的 pagefind.js（其相对路径自带 bundlePath），而非打包 npm 包
+    const url = withBase('/pagefind/pagefind.js')
+    const mod = (await import(/* @vite-ignore */ url)) as unknown as {
+      init?: (o?: Record<string, unknown>) => Promise<void>
+      search: (q: string) => Promise<{ results: { data: () => Promise<Record<string, any>> }[] }>
+    }
+    await mod.init?.()
+    pagefindMod = mod
+    pagefindReady.value = true
+  } catch {
+    pagefindError.value = true
+  }
+}
+
+async function runSearch() {
+  const q = query.value.trim()
+  if (!q) {
+    articles.value = []
+    return
+  }
+  await ensurePagefind()
+  if (pagefindError.value || !pagefindMod) return
+  loading.value = true
+  try {
+    const res = await pagefindMod.search(q)
+    const datas = await Promise.all(res.results.slice(0, 8).map((r) => r.data()))
+    articles.value = datas.map((d) => ({
+      type: 'page' as const,
+      text: (d.meta?.title as string) || d.url,
+      link: d.url,
+      excerpt: d.excerpt || '',
+    }))
+  } catch {
+    articles.value = []
+  } finally {
+    loading.value = false
+  }
+}
+
+watch(query, () => {
+  active.value = 0
+  clearTimeout(timer)
+  if (!query.value.trim()) {
+    articles.value = []
+    return
+  }
+  timer = setTimeout(runSearch, 160)
+})
 
 function onKeyDown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
@@ -21,32 +102,51 @@ function onKeyDown(e: KeyboardEvent) {
   }
 }
 
+function onInputKey(e: KeyboardEvent) {
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    if (combined.value.length) active.value = Math.min(active.value + 1, combined.value.length - 1)
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    active.value = Math.max(active.value - 1, 0)
+  } else if (e.key === 'Enter') {
+    e.preventDefault()
+    const item = combined.value[active.value]
+    if (item) go(item)
+  }
+}
+
+function go(item: { link: string }) {
+  router.go(item.link)
+  close()
+}
+
 async function openPanel() {
   open.value = true
+  query.value = ''
+  articles.value = []
+  active.value = 0
   await nextTick()
-  if (!root.value) return
-  root.value.replaceChildren()
-  // 动态加载 default-ui（避免拖累首屏 JS），并用其 PagefindUI 构造器显式初始化
-  const mod = await import('@pagefind/default-ui')
-  const PagefindUI = mod.default ?? (mod as { PagefindUI?: typeof import('@pagefind/default-ui').default }).PagefindUI
-  if (typeof PagefindUI !== 'function') return
-  pagefindUI = new (PagefindUI as new (o: Record<string, unknown>) => { destroy?: () => void })({
-    element: root.value,
-    bundlePath: withBase('/pagefind/'),
-    showSubResults: false,
-  })
+  inputEl.value?.focus()
+  ensurePagefind() // 预热索引，输入时即可搜文章
 }
 
 function close() {
   open.value = false
-  pagefindUI?.destroy?.()
-  pagefindUI = null
+  query.value = ''
+  articles.value = []
+  clearTimeout(timer)
 }
 
 onMounted(() => document.addEventListener('keydown', onKeyDown))
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', onKeyDown)
-  close()
+  clearTimeout(timer)
+})
+
+watch(active, (i) => {
+  const el = document.getElementById(`pfind-item-${i}`)
+  el?.scrollIntoView({ block: 'nearest' })
 })
 </script>
 
@@ -64,9 +164,61 @@ onBeforeUnmount(() => {
     <Teleport to="body">
       <Transition name="pfind-fade">
         <div v-if="open" class="pfind-overlay" @click.self="close">
-          <div class="pfind-panel" role="dialog" aria-modal="true" aria-label="搜索文章">
-            <div ref="root" class="pfind-root"></div>
-            <button type="button" class="pfind-close" aria-label="关闭搜索" @click="close">Esc</button>
+          <div class="pfind-panel" role="dialog" aria-modal="true" aria-label="搜索与快捷跳转">
+            <div class="pfind-searchbox">
+              <svg class="pfind-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              <input
+                ref="inputEl"
+                v-model="query"
+                class="pfind-input"
+                type="text"
+                placeholder="搜索文章，或跳转到栏目 / 标签 / 归档…"
+                aria-label="搜索"
+                @keydown="onInputKey"
+              />
+              <kbd class="pfind-nav-kbd">Esc</kbd>
+            </div>
+
+            <ul class="pfind-list">
+              <template v-if="navFiltered.length">
+                <li class="pfind-group">快捷跳转</li>
+                <li
+                  v-for="(item, i) in navFiltered"
+                  :id="`pfind-item-${i}`"
+                  :key="'nav-' + item.link"
+                  class="pfind-item"
+                  :class="{ active: i === active }"
+                  @mouseenter="active = i"
+                  @click="go(item)"
+                >
+                  <span class="pfind-item-text">{{ item.text }}</span>
+                  <span class="pfind-item-tag">跳转</span>
+                </li>
+              </template>
+
+              <template v-if="query.trim() && articles.length">
+                <li class="pfind-group">文章</li>
+                <li
+                  v-for="(item, j) in articles"
+                  :id="`pfind-item-${navFiltered.length + j}`"
+                  :key="'page-' + item.link"
+                  class="pfind-item"
+                  :class="{ active: navFiltered.length + j === active }"
+                  @mouseenter="active = navFiltered.length + j"
+                  @click="go(item)"
+                >
+                  <span class="pfind-item-text">{{ item.text }}</span>
+                  <span class="pfind-item-excerpt" v-html="item.excerpt"></span>
+                </li>
+              </template>
+
+              <li v-if="loading" class="pfind-empty">搜索中…</li>
+              <li v-else-if="query.trim() && !navFiltered.length && !articles.length" class="pfind-empty">没有匹配的结果</li>
+              <li v-else-if="query.trim() && pagefindError" class="pfind-empty">当前为开发模式，搜索索引尚未生成，请先执行 build 后再预览。</li>
+            </ul>
           </div>
         </div>
       </Transition>
@@ -146,28 +298,90 @@ onBeforeUnmount(() => {
   background: var(--vp-c-bg);
   border: 1px solid var(--vp-c-divider);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.24);
-  padding: 16px;
+  padding: 12px;
 }
 
-.pfind-panel :deep(.pagefind-ui__search-clear) {
-  display: none;
-}
-
-.pfind-close {
-  position: sticky;
-  bottom: 12px;
-  float: right;
-  font-size: 12px;
-  color: var(--vp-c-text-3);
-  background: var(--vp-c-bg-alt);
+.pfind-searchbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
-  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--vp-c-bg-alt);
+}
+
+.pfind-input {
+  flex: 1;
+  height: 40px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--vp-c-text-1);
+  font-size: 15px;
+}
+
+.pfind-input::placeholder {
+  color: var(--vp-c-text-3);
+}
+
+.pfind-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.pfind-group {
+  padding: 10px 8px 4px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--vp-c-text-3);
+  text-transform: uppercase;
+}
+
+.pfind-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-.pfind-close:hover {
+.pfind-item.active {
+  background: var(--vp-c-default-soft);
+}
+
+.pfind-item-text {
+  font-size: 14px;
   color: var(--vp-c-text-1);
+}
+
+.pfind-item-tag {
+  align-self: flex-end;
+  font-size: 11px;
+  color: var(--vp-c-brand-1);
+}
+
+.pfind-item-excerpt {
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pfind-item-excerpt :deep(mark) {
+  background: var(--vp-c-yellow-soft);
+  color: var(--vp-c-text-1);
+}
+
+.pfind-empty {
+  padding: 14px 8px;
+  font-size: 13px;
+  color: var(--vp-c-text-3);
 }
 
 @media (max-width: 640px) {
