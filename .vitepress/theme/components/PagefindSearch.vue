@@ -11,7 +11,7 @@ const router = useRouter()
 const navItems = computed(() =>
   ((theme.value.nav ?? []) as { text?: string; link?: string }[])
     .filter((i) => i.link)
-    .map((i) => ({ text: i.text ?? i.link!, link: i.link! })),
+    .map((i) => ({ type: 'nav' as const, text: i.text ?? i.link!, link: i.link! })),
 )
 const navFiltered = computed(() => {
   const q = query.value.trim().toLowerCase()
@@ -26,6 +26,9 @@ const loading = ref(false)
 const inputEl = ref<HTMLInputElement>()
 const pagefindReady = ref(false)
 const pagefindError = ref(false)
+// 构建版本标识（CI 注入 VITE_BUILD_SHA，如 19bcd0e），用于排查“线上是否最新版”的缓存误判；
+// 本地 dev/preview 无该环境变量时显示 dev。
+const buildSha = String(import.meta.env.VITE_BUILD_SHA ?? 'dev').slice(0, 7)
 let pagefindMod: { init?: (o?: Record<string, unknown>) => Promise<void>; search: (q: string) => Promise<{ results: { data: () => Promise<Record<string, any>> }[] }> } | null = null
 let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -117,9 +120,10 @@ function onInputKey(e: KeyboardEvent) {
 }
 
 function go(item: { link: string; type: 'nav' | 'page' }) {
-  // nav 快捷项的 link 来自 config.nav（不含 base，如 /Tech/），VitePress Router.go() 不拼 base → 需 withBase；
-  // Pagefind 返回的文章 url 已含 base（如 /myblog/Tech/xxx），再加会导致双重 base 404。
-  router.go(item.type === 'nav' ? withBase(item.link) : item.link)
+  // Pagefind 返回的文章 url 已含 base（如 /myblog/Tech/xxx），原样传给 router.go；
+  // nav 快捷项的 link 来自 config.nav（不含 base，如 /Tech/），而 VitePress 的
+  // Router.go() 不会自动拼接 base——缺失时 pushState 到站点根会 404，故需 withBase。
+  router.go(item.type === 'page' ? item.link : withBase(item.link))
   close()
 }
 
@@ -221,6 +225,8 @@ watch(active, (i) => {
               <li v-else-if="query.trim() && !navFiltered.length && !articles.length" class="pfind-empty">没有匹配的结果</li>
               <li v-else-if="query.trim() && pagefindError" class="pfind-empty">当前为开发模式，搜索索引尚未生成，请先执行 build 后再预览。</li>
             </ul>
+
+            <div class="pfind-version" title="当前构建版本标识，用于排查缓存导致的旧版问题">build {{ buildSha }}</div>
           </div>
         </div>
       </Transition>
@@ -384,6 +390,15 @@ watch(active, (i) => {
   padding: 14px 8px;
   font-size: 13px;
   color: var(--vp-c-text-3);
+}
+
+.pfind-version {
+  padding: 10px 8px 2px;
+  font-size: 11px;
+  text-align: right;
+  color: var(--vp-c-text-3);
+  border-top: 1px solid var(--vp-c-divider);
+  margin-top: 6px;
 }
 
 @media (max-width: 640px) {
