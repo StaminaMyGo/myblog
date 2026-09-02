@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter, withBase } from 'vitepress'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
 
 interface Post {
@@ -17,9 +17,6 @@ const props = withDefaults(
   defineProps<{ category?: string; tag?: string; limit?: number; grouped?: boolean; pageSize?: number }>(),
   { category: '', tag: '', limit: 0, grouped: false, pageSize: 20 },
 )
-
-const route = useRoute()
-const router = useRouter()
 
 const CATS: Record<string, { label: string; icon: string }> = {
   tech: { label: '技术笔记', icon: '🖥️' },
@@ -53,8 +50,9 @@ const years = computed<string[]>(() => {
 })
 
 /* ---------- 年份与分页状态 ----------
- * SSG 站点 SSR 阶段 useRoute().query 恒为空，hydration 后也不会自动补上，
- * 因此初始值从 window.location.search 解析，翻页等 SPA 导航则通过 watch route.query 同步。
+ * 数据源是 window.location.search（VitePress 1.6.4 的 useRoute() 对象没有 query 属性）；
+ * SPA 内导航由被 patch 的 history.replaceState 派发 mb-urlchange（见 theme/index.ts），
+ * 浏览器前进/后退触发 popstate，两者都经 syncFromUrl 同步本组件状态。
  */
 function readLocationQuery(): Record<string, string> {
   if (typeof window === 'undefined') return {}
@@ -71,11 +69,19 @@ function applyQuery(q: Record<string, string | number | undefined>) {
 const currentPage = ref(1)
 const activeYear = ref('')
 
-onMounted(() => applyQuery(readLocationQuery()))
-watch(
-  () => route.query,
-  (q) => applyQuery(q as Record<string, string>),
-)
+function syncFromUrl() {
+  applyQuery(readLocationQuery())
+}
+
+onMounted(() => {
+  syncFromUrl()
+  window.addEventListener('popstate', syncFromUrl)
+  window.addEventListener('mb-urlchange', syncFromUrl)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('popstate', syncFromUrl)
+  window.removeEventListener('mb-urlchange', syncFromUrl)
+})
 
 const byYear = computed<Post[]>(() =>
   activeYear.value ? filtered.value.filter((p) => p.date.startsWith(activeYear.value)) : filtered.value,
@@ -94,8 +100,12 @@ function setQuery(patch: Record<string, string | number | undefined>) {
   for (const [k, v] of Object.entries({ ...readLocationQuery(), ...patch })) {
     if (v !== undefined && v !== '' && v !== 1) query[k] = v
   }
-  router.replace({ path: route.path, query })
-  if (typeof window !== 'undefined') window.scrollTo({ top: 0 })
+  const qs = new URLSearchParams()
+  for (const [k, v] of Object.entries(query)) qs.set(k, String(v))
+  const search = qs.toString()
+  // 被 patch 的 replaceState 会自动派发 mb-urlchange → syncFromUrl 同步分页/年份
+  history.replaceState({}, '', location.pathname + (search ? `?${search}` : ''))
+  window.scrollTo({ top: 0 })
 }
 
 function goPage(n: number) {

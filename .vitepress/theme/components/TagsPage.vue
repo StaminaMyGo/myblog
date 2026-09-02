@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useRoute, withBase } from 'vitepress'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
 
 interface Post {
@@ -22,40 +22,38 @@ const tagCounts = computed<[string, number][]>(() => {
 })
 
 /**
- * SSG 站点 SSR 阶段 useRoute().query 恒为空，hydration 后也不会自动补上。
- * 因此从 window.location.search 实时解析当前 tag，兼容：整页刷新、外部 <a> 直链、浏览器前进/后退。
+ * URL query 的真实数据源是 window.location.search。
+ * VitePress 1.6.4 的 useRoute() 对象没有 query 属性，SPA 导航只做 history.pushState（不触发 popstate）；
+ * 因此同时监听 popstate（后退/前进）与 mb-urlchange（SPA 内 URL 变更，由 theme/index.ts patch 派发）。
  */
 function readTagFromUrl(): string {
   if (typeof window === 'undefined') return ''
   return new URLSearchParams(window.location.search).get('tag') || ''
 }
 
+const selected = ref(readTagFromUrl())
+
+/** 响应 SPA 内标签切换与浏览器前进/后退 */
 function syncFromUrl() {
   selected.value = readTagFromUrl()
 }
 
-const route = useRoute()
-const selected = ref(readTagFromUrl())
-
-// 首屏 + 标签页内 SPA 切换标签都会触发；immediate 覆盖初始进入。
-// SSR 阶段 route.query 为 undefined，用 ?. 兜底；客户端为响应式对象。
-watch(
-  () => route.query?.tag,
-  (t) => { selected.value = typeof t === 'string' ? t : '' },
-  { immediate: true },
-)
-
 onMounted(() => {
   window.addEventListener('popstate', syncFromUrl)
+  window.addEventListener('mb-urlchange', syncFromUrl)
 })
-onBeforeUnmount(() => window.removeEventListener('popstate', syncFromUrl))
+onBeforeUnmount(() => {
+  window.removeEventListener('popstate', syncFromUrl)
+  window.removeEventListener('mb-urlchange', syncFromUrl)
+})
 
 function tagLink(t: string): string {
   return `${withBase('/tags/')}?tag=${encodeURIComponent(t)}`
 }
 
+/** 清除筛选：SPA 内写历史，被 patch 的 pushState 会派发 mb-urlchange 触发同步 */
 function clearSel() {
-  window.location.href = withBase('/tags/')
+  history.pushState({}, '', withBase('/tags/'))
 }
 </script>
 
