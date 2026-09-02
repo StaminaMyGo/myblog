@@ -128,6 +128,11 @@ function fmtDate(iso: string): string {
   const p = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
 }
+
+/** 标签统一跳到 /tags/?tag=xxx，与 TagsPage 的选中逻辑保持一致 */
+function tagLink(t: string): string {
+  return `${withBase('/tags/')}?tag=${encodeURIComponent(t)}`
+}
 </script>
 
 <template>
@@ -142,7 +147,7 @@ function fmtDate(iso: string): string {
               <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
               <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
               <div v-if="p.tags.length" class="mb-tags">
-                <span v-for="t in p.tags" :key="t" class="mb-tag"># {{ t }}</span>
+                <a v-for="t in p.tags" :key="t" class="mb-tag" :href="tagLink(t)"># {{ t }}</a>
               </div>
             </div>
           </li>
@@ -179,7 +184,7 @@ function fmtDate(iso: string): string {
                 <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
                 <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
                 <div v-if="p.tags.length" class="mb-tags">
-                  <span v-for="t in p.tags" :key="t" class="mb-tag"># {{ t }}</span>
+                  <a v-for="t in p.tags" :key="t" class="mb-tag" :href="tagLink(t)"># {{ t }}</a>
                 </div>
               </div>
             </li>

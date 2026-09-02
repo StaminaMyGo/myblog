@@ -292,6 +292,8 @@ a {
   padding: 2px 10px;
   margin-right: 6px;
   font-family: var(--mb-mono);
+  text-decoration: none !important;
+  cursor: pointer;
   transition: background var(--mb-duration-fast) ease, border-color var(--mb-duration-fast) ease, color var(--mb-duration-fast) ease;
 }
 .mb-tag:hover {
