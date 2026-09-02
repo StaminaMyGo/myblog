@@ -79,7 +79,7 @@ export default defineConfig({
   base,
   cleanUrls: true,
   srcExclude: ['README.md'],
-  lastUpdated: true,
+  lastUpdated: false,
   appearance: true,
 
   // Pagefind 的搜索结果组件 <pagefind-ui> 是自定义元素，避免 Vue 编译告警

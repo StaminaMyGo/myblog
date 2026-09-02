@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute, withBase } from 'vitepress'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
 
 interface Post {
@@ -11,7 +11,6 @@ interface Post {
   tags: string[]
 }
 
-const route = useRoute()
 const allPosts = posts as unknown as Post[]
 
 const tagCounts = computed<[string, number][]>(() => {
@@ -22,7 +21,26 @@ const tagCounts = computed<[string, number][]>(() => {
   return Array.from(map.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
 })
 
-const selected = computed(() => String(route.query?.tag || ''))
+/**
+ * SSG 站点 SSR 阶段 useRoute().query 恒为空，hydration 后也不会自动补上。
+ * 因此从 window.location.search 实时解析当前 tag，兼容：整页刷新、外部 <a> 直链、浏览器前进/后退。
+ */
+function readTagFromUrl(): string {
+  if (typeof window === 'undefined') return ''
+  return new URLSearchParams(window.location.search).get('tag') || ''
+}
+
+function syncFromUrl() {
+  selected.value = readTagFromUrl()
+}
+
+const selected = ref(readTagFromUrl())
+
+onMounted(() => {
+  syncFromUrl()
+  window.addEventListener('popstate', syncFromUrl)
+})
+onBeforeUnmount(() => window.removeEventListener('popstate', syncFromUrl))
 
 function tagLink(t: string): string {
   return `${withBase('/tags/')}?tag=${encodeURIComponent(t)}`
@@ -34,17 +52,20 @@ function clearSel() {
 </script>
 
 <template>
-  <div class="tags-page">
-    <div class="tags-cloud">
-      <a v-for="[t, c] in tagCounts" :key="t" class="tags-chip" :class="{ active: t === selected }" :href="tagLink(t)">
-        {{ t }} <span class="tags-count">{{ c }}</span>
-      </a>
-      <button v-if="selected" type="button" class="tags-clear" @click="clearSel">✕ 清除筛选</button>
-    </div>
+  <!-- 页面依赖 URL query（SSG 无法在 SSR 阶段得知），整体仅客户端渲染，避免 hydration mismatch -->
+  <ClientOnly>
+    <div class="tags-page">
+      <div class="tags-cloud">
+        <a v-for="[t, c] in tagCounts" :key="t" class="tags-chip" :class="{ active: t === selected }" :href="tagLink(t)">
+          {{ t }} <span class="tags-count">{{ c }}</span>
+        </a>
+        <button v-if="selected" type="button" class="tags-clear" @click="clearSel">✕ 清除筛选</button>
+      </div>
 
-    <PostsList v-if="selected" :tag="selected" :page-size="50" />
-    <p v-else class="tags-hint">共 {{ tagCounts.length }} 个标签 · 点击标签查看相关文章</p>
-  </div>
+      <PostsList v-if="selected" :tag="selected" :page-size="50" />
+      <p v-else class="tags-hint">共 {{ tagCounts.length }} 个标签 · 点击标签查看相关文章</p>
+    </div>
+  </ClientOnly>
 </template>
 
 <style scoped>

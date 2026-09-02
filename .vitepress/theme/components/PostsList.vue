@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter, withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
 
@@ -52,20 +52,34 @@ const years = computed<string[]>(() => {
   return Array.from(set).sort().reverse()
 })
 
-const activeYear = computed<string>(() => {
-  const v = String(route.query?.year || '')
-  return years.value.includes(v) ? v : ''
-})
+/* ---------- 年份与分页状态 ----------
+ * SSG 站点 SSR 阶段 useRoute().query 恒为空，hydration 后也不会自动补上，
+ * 因此初始值从 window.location.search 解析，翻页等 SPA 导航则通过 watch route.query 同步。
+ */
+function readLocationQuery(): Record<string, string> {
+  if (typeof window === 'undefined') return {}
+  return Object.fromEntries(new URLSearchParams(window.location.search))
+}
+
+function applyQuery(q: Record<string, string | number | undefined>) {
+  const n = parseInt(String(q.page ?? '1'), 10)
+  currentPage.value = Number.isNaN(n) || n < 1 ? 1 : n
+  const y = String(q.year ?? '')
+  activeYear.value = years.value.includes(y) ? y : ''
+}
+
+const currentPage = ref(1)
+const activeYear = ref('')
+
+onMounted(() => applyQuery(readLocationQuery()))
+watch(
+  () => route.query,
+  (q) => applyQuery(q as Record<string, string>),
+)
 
 const byYear = computed<Post[]>(() =>
   activeYear.value ? filtered.value.filter((p) => p.date.startsWith(activeYear.value)) : filtered.value,
 )
-
-/* ---------- 分页（每页 pageSize 篇，URL 里的 ?page=N 可分享） ---------- */
-const currentPage = computed(() => {
-  const n = parseInt(String(route.query?.page || '1'), 10)
-  return Number.isNaN(n) || n < 1 ? 1 : n
-})
 
 const totalPages = computed(() => Math.max(1, Math.ceil(byYear.value.length / props.pageSize)))
 
@@ -76,9 +90,8 @@ const paged = computed<Post[]>(() => {
 })
 
 function setQuery(patch: Record<string, string | number | undefined>) {
-  const prev = (route.query ?? {}) as Record<string, string | number>
   const query: Record<string, string | number> = {}
-  for (const [k, v] of Object.entries({ ...prev, ...patch })) {
+  for (const [k, v] of Object.entries({ ...readLocationQuery(), ...patch })) {
     if (v !== undefined && v !== '' && v !== 1) query[k] = v
   }
   router.replace({ path: route.path, query })
@@ -138,42 +151,45 @@ function fmtDate(iso: string): string {
     </template>
 
     <template v-else>
-      <!-- 年份筛选 -->
-      <div v-if="years.length > 1" class="mb-filters">
-        <button
-          type="button"
-          class="mb-chip"
-          :class="{ active: !activeYear }"
-          @click="pickYear('')"
-        >全部 · {{ filtered.length }} 篇</button>
-        <button
-          v-for="y in years"
-          :key="y"
-          type="button"
-          class="mb-chip"
-          :class="{ active: activeYear === y }"
-          @click="pickYear(y)"
-        >{{ y }}</button>
-      </div>
-
-      <ul class="mb-posts">
-        <li v-for="p in paged" :key="p.url" class="mb-post">
-          <span class="mb-post-date">{{ fmtDate(p.date) }}</span>
-          <div class="mb-post-main">
-            <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
-            <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
-            <div v-if="p.tags.length" class="mb-tags">
-              <span v-for="t in p.tags" :key="t" class="mb-tag"># {{ t }}</span>
-            </div>
+      <!-- 列表/筛选/分页依赖 URL query（SSG 的 SSR 阶段无法得知），仅客户端渲染，避免 hydration mismatch -->
+      <ClientOnly>
+        <div>
+          <!-- 年份筛选 -->
+          <div v-if="years.length > 1" class="mb-filters">
+            <button
+              type="button"
+              class="mb-chip"
+              :class="{ active: !activeYear }"
+              @click="pickYear('')"
+            >全部 · {{ filtered.length }} 篇</button>
+            <button
+              v-for="y in years"
+              :key="y"
+              type="button"
+              class="mb-chip"
+              :class="{ active: activeYear === y }"
+              @click="pickYear(y)"
+            >{{ y }}</button>
           </div>
-        </li>
-      </ul>
 
-      <!-- 分页器 -->
-      <nav v-if="totalPages > 1" class="mb-pager" aria-label="分页">
-        <button type="button" class="mb-pager-btn" :disabled="currentPage <= 1" @click="goPage(currentPage - 1)">
-          上一页
-        </button>
+          <ul class="mb-posts">
+            <li v-for="p in paged" :key="p.url" class="mb-post">
+              <span class="mb-post-date">{{ fmtDate(p.date) }}</span>
+              <div class="mb-post-main">
+                <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
+                <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
+                <div v-if="p.tags.length" class="mb-tags">
+                  <span v-for="t in p.tags" :key="t" class="mb-tag"># {{ t }}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <!-- 分页器 -->
+          <nav v-if="totalPages > 1" class="mb-pager" aria-label="分页">
+            <button type="button" class="mb-pager-btn" :disabled="currentPage <= 1" @click="goPage(currentPage - 1)">
+              上一页
+            </button>
         <span class="mb-pager-info">第 {{ Math.min(currentPage, totalPages) }} / {{ totalPages }} 页</span>
         <button
           type="button"
@@ -184,6 +200,8 @@ function fmtDate(iso: string): string {
           下一页
         </button>
       </nav>
+        </div>
+      </ClientOnly>
     </template>
   </div>
 </template>
