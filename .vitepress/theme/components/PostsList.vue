@@ -129,7 +129,36 @@ function setQuery(patch: Record<string, string | number | undefined>) {
 function goPage(n: number) {
   if (n < 1 || n > totalPages.value) return
   setQuery({ page: n === 1 ? undefined : n })
+  showPageToast(n)
 }
+
+/* ---------- 换页提示 toast ----------
+ * 翻页（按钮 / 页码圆点 / 循环滑动）后顶部弹出：页码位置 + 当页文章的发布时间区间。
+ * 仅在用户主动换页（goPage 成功）时触发；首屏、浏览器前进/后退、年份筛选不弹出。
+ */
+const toast = ref<{ page: number; total: number; range: string } | null>(null)
+let toastTimer: ReturnType<typeof setTimeout> | undefined
+
+/** 某页的发布时间区间：pageDateRange(n) 计算第 n 页文章 date 的最小~最大值，单篇时只显示日期 */
+function pageRange(n: number): string {
+  const list = byYear.value.slice((n - 1) * props.pageSize, n * props.pageSize)
+  const dates = list.map((p) => fmtDate(p.date)).filter(Boolean).sort()
+  if (!dates.length) return '—'
+  if (dates[0] === dates[dates.length - 1]) return dates[0]
+  return `${dates[0]} ~ ${dates[dates.length - 1]}`
+}
+
+function showPageToast(n: number) {
+  clearTimeout(toastTimer)
+  toast.value = { page: n, total: totalPages.value, range: pageRange(n) }
+  toastTimer = setTimeout(() => {
+    toast.value = null
+  }, 2600)
+}
+
+onBeforeUnmount(() => {
+  clearTimeout(toastTimer)
+})
 
 function pickYear(y: string) {
   setQuery({ year: y || undefined, page: undefined })
@@ -399,6 +428,13 @@ function tagLink(t: string): string {
                 />
               </template>
             </div>
+
+            <!-- 换页提示：页码位置 + 当页发布时间区间，2.6s 后自动消失 -->
+            <Transition name="mb-toast">
+              <div v-if="toast" class="mb-toast" role="status" aria-live="polite">
+                {{ t.toastPage(toast.page, toast.total, toast.range) }}
+              </div>
+            </Transition>
           </div>
         </div>
       </ClientOnly>
@@ -534,5 +570,37 @@ function tagLink(t: string): string {
   font-size: 12px;
   color: var(--mb-ui2, #999);
   user-select: none;
+}
+
+/* ---------- 换页提示 toast ----------
+ * 固定在视口顶部（吸顶导航下方），深色毛玻璃胶囊，不带交互（pointer-events: none），
+ * 避免遮挡列表操作；淡入淡出 + 轻微下滑入场。 */
+.mb-toast {
+  position: fixed;
+  top: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  background: rgba(17, 24, 39, 0.82);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+.mb-toast-enter-active,
+.mb-toast-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.mb-toast-enter-from,
+.mb-toast-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -10px);
 }
 </style>

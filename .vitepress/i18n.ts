@@ -59,6 +59,8 @@ export const strings = {
     pagerNext: '下一页',
     pagerInfo: (current: number, total: number) => `第 ${current} / ${total} 页`,
     archiveAll: (n: number) => `全部 · ${n} 篇`,
+    /** 换页 toast：页码位置 + 当页文章发布时间区间（range 由组件拼接，如 2026-08-15 ~ 2026-09-02） */
+    toastPage: (page: number, total: number, range: string) => `第 ${page} / ${total} 页 · ${range}`,
 
     /* 标签页 */
     tagsHint: (n: number) => `共 ${n} 个标签 · 点击标签查看相关文章`,
@@ -93,6 +95,7 @@ export const strings = {
     pagerNext: 'Next',
     pagerInfo: (current: number, total: number) => `Page ${current} / ${total}`,
     archiveAll: (n: number) => `All · ${n}`,
+    toastPage: (page: number, total: number, range: string) => `Page ${page} / ${total} · ${range}`,
 
     tagsHint: (n: number) => `${n} tags · click a tag to see related posts`,
     tagsClear: '✕ Clear filter',
