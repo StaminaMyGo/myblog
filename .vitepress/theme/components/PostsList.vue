@@ -82,11 +82,24 @@ onMounted(() => {
   syncFromUrl()
   window.addEventListener('popstate', syncFromUrl)
   window.addEventListener('mb-urlchange', syncFromUrl)
+  // pointerup 兜底：指针离开捕获元素/移动过快时，元素上的 pointerup 可能丢失，
+  // window 级别的监听保证滑动松手必定被处理（防抖由 dragging 标志保证）。
+  window.addEventListener('pointerup', onWindowPointerUp)
+  window.addEventListener('pointercancel', onWindowPointerUp)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('popstate', syncFromUrl)
   window.removeEventListener('mb-urlchange', syncFromUrl)
+  window.removeEventListener('pointerup', onWindowPointerUp)
+  window.removeEventListener('pointercancel', onWindowPointerUp)
 })
+
+/** window 兜底处理：若事件已由元素层处理（dragging 已复位），此处自动跳过 */
+function onWindowPointerUp(e: PointerEvent) {
+  if (!dragging.value) return
+  if (activePointerId !== -1 && e.pointerId !== activePointerId) return
+  onPointerUp(e)
+}
 
 const byYear = computed<Post[]>(() =>
   activeYear.value ? filtered.value.filter((p) => p.date.startsWith(activeYear.value)) : filtered.value,
@@ -136,6 +149,8 @@ let startY = 0
 let axis: 'x' | 'y' | null = null
 let moved = 0
 let suppressClick = false
+let captured = false
+let activePointerId = -1
 
 /** 翻页阈值：最多 80px，窄屏按列表宽度的 18% 收敛 */
 function swipeThreshold(): number {
@@ -145,12 +160,22 @@ function swipeThreshold(): number {
 function onPointerDown(e: PointerEvent) {
   if (totalPages.value < 2) return
   if (e.pointerType === 'mouse' && e.button !== 0) return
+  // 阻止文本选择与原生链接/图片拖拽：按住列表内 <a>（标题/标签）拖动时，
+  // 若不禁用默认行为，浏览器会启动 HTML5 drag 并吞掉后续 pointermove/pointerup，
+  // 导致“按住左右滑动换页”在链接上完全失效。preventDefault 不影响 click 派发。
+  e.preventDefault()
   startX = e.clientX
   startY = e.clientY
   axis = null
   moved = 0
+  dragX.value = 0
   dragging.value = true
-  ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
+  captured = false
+  activePointerId = e.pointerId
+  // 注意：不能在 pointerdown 时 setPointerCapture。
+  // 一旦 capture，浏览器会把后续 click 也重定向到本元素，
+  // 列表内按钮/链接的点击将全部失效（历史教训：“上一页/下一页”按钮点不动）。
+  // 等到 onPointerMove 确认横向意图后再 capture，普通点击不受影响。
 }
 
 function onPointerMove(e: PointerEvent) {
@@ -161,7 +186,15 @@ function onPointerMove(e: PointerEvent) {
     if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return
     // 方向锁：只有横向意图才劫持手势，纵向照常滚动页面（移动端列表仍可上下滑）
     axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'
-    if (axis === 'x') window.getSelection()?.removeAllRanges()
+    if (axis === 'x') {
+      window.getSelection()?.removeAllRanges()
+      try {
+        ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
+        captured = true
+      } catch {
+        /* capture 失败时仍依赖事件冒泡 */
+      }
+    }
   }
   if (axis !== 'x') return
   moved = Math.max(moved, Math.abs(dx))
@@ -171,6 +204,14 @@ function onPointerMove(e: PointerEvent) {
 function onPointerUp(e: PointerEvent) {
   if (!dragging.value) return
   dragging.value = false
+  if (captured) {
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture?.(activePointerId)
+    } catch {
+      /* 忽略释放异常 */
+    }
+    captured = false
+  }
   if (axis === 'x') {
     const dx = e.clientX - startX
     if (Math.abs(dx) > swipeThreshold()) {
@@ -184,6 +225,20 @@ function onPointerUp(e: PointerEvent) {
     setTimeout(() => {
       suppressClick = false
     }, 300)
+  }
+}
+
+function onPointerCancel(e: PointerEvent) {
+  dragging.value = false
+  axis = null
+  dragX.value = 0
+  if (captured) {
+    try {
+      ;(e.currentTarget as HTMLElement).releasePointerCapture?.(activePointerId)
+    } catch {
+      /* 忽略释放异常 */
+    }
+    captured = false
   }
 }
 
@@ -294,8 +349,9 @@ function tagLink(t: string): string {
             @pointerdown="onPointerDown"
             @pointermove="onPointerMove"
             @pointerup="onPointerUp"
-            @pointercancel="onPointerUp"
+            @pointercancel="onPointerCancel"
             @click.capture="onClickCapture"
+            @dragstart.prevent
           >
             <ul class="mb-posts" :style="{ transform: `translateX(${dragX}px)` }">
               <li v-for="p in paged" :key="p.url" class="mb-post">
