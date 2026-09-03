@@ -1,17 +1,31 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useData, useRouter, withBase } from 'vitepress'
+import { useLang } from '../composables/useLang'
 
 const props = withDefaults(defineProps<{ mobile?: boolean }>(), { mobile: false })
 
 const { theme } = useData()
 const router = useRouter()
+const { lang, t } = useLang()
+
+/**
+ * 按当前语言从双语 HTML 中取出纯文本。
+ * config.mts 的 nav.text 现在是 `<span class="lang-zh">…</span><span class="lang-en">…</span>`，
+ * 直接插值会把标签源码显示到面板里；这里先还原成纯文本再参与搜索过滤。
+ * 依赖 lang，语言切换后列表自动重算。
+ */
+function plain(html: string): string {
+  const cls = lang.value === 'en' ? 'lang-en' : 'lang-zh'
+  const m = html.match(new RegExp(`<span class="${cls}"[^>]*>([\\s\\S]*?)</span>`))
+  return m ? m[1] : html.replace(/<[^>]*>/g, '')
+}
 
 // 顶栏导航即「快捷跳转」数据源（分类 / 标签 / 归档 / 首页），与 config.mts 的 nav 同步
 const navItems = computed(() =>
   ((theme.value.nav ?? []) as { text?: string; link?: string }[])
     .filter((i) => i.link)
-    .map((i) => ({ type: 'nav' as const, text: i.text ?? i.link!, link: i.link! })),
+    .map((i) => ({ type: 'nav' as const, text: plain(i.text ?? i.link!), link: i.link! })),
 )
 const navFiltered = computed(() => {
   const q = query.value.trim().toLowerCase()
@@ -158,19 +172,19 @@ watch(active, (i) => {
 
 <template>
   <div class="pfind-nav" :class="{ 'pfind-nav-mobile': mobile }">
-    <button type="button" class="pfind-nav-btn" aria-label="搜索文章" @click="openPanel">
+    <button type="button" class="pfind-nav-btn" :aria-label="t.searchOpen" @click="openPanel">
       <svg class="pfind-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="11" cy="11" r="8" />
         <path d="m21 21-4.35-4.35" />
       </svg>
-      <span class="pfind-nav-text">搜索</span>
+      <span class="pfind-nav-text">{{ t.searchShort }}</span>
       <kbd v-if="!mobile" class="pfind-nav-kbd">Ctrl K</kbd>
     </button>
 
     <Teleport to="body">
       <Transition name="pfind-fade">
         <div v-if="open" class="pfind-overlay" @click.self="close">
-          <div class="pfind-panel" role="dialog" aria-modal="true" aria-label="搜索与快捷跳转">
+          <div class="pfind-panel" role="dialog" aria-modal="true" :aria-label="t.searchPanelAria">
             <div class="pfind-searchbox">
               <svg class="pfind-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="11" cy="11" r="8" />
@@ -181,8 +195,8 @@ watch(active, (i) => {
                 v-model="query"
                 class="pfind-input"
                 type="text"
-                placeholder="搜索文章，或跳转到栏目 / 标签 / 归档…"
-                aria-label="搜索"
+                :placeholder="t.searchPlaceholder"
+                :aria-label="t.searchShort"
                 @keydown="onInputKey"
               />
               <kbd class="pfind-nav-kbd">Esc</kbd>
@@ -190,7 +204,7 @@ watch(active, (i) => {
 
             <ul class="pfind-list">
               <template v-if="navFiltered.length">
-                <li class="pfind-group">快捷跳转</li>
+                <li class="pfind-group">{{ t.searchGroupNav }}</li>
                 <li
                   v-for="(item, i) in navFiltered"
                   :id="`pfind-item-${i}`"
@@ -201,12 +215,12 @@ watch(active, (i) => {
                   @click="go(item)"
                 >
                   <span class="pfind-item-text">{{ item.text }}</span>
-                  <span class="pfind-item-tag">跳转</span>
+                  <span class="pfind-item-tag">{{ t.searchNavTag }}</span>
                 </li>
               </template>
 
               <template v-if="query.trim() && articles.length">
-                <li class="pfind-group">文章</li>
+                <li class="pfind-group">{{ t.searchGroupPosts }}</li>
                 <li
                   v-for="(item, j) in articles"
                   :id="`pfind-item-${navFiltered.length + j}`"
@@ -221,9 +235,9 @@ watch(active, (i) => {
                 </li>
               </template>
 
-              <li v-if="loading" class="pfind-empty">搜索中…</li>
-              <li v-else-if="query.trim() && !navFiltered.length && !articles.length" class="pfind-empty">没有匹配的结果</li>
-              <li v-else-if="query.trim() && pagefindError" class="pfind-empty">当前为开发模式，搜索索引尚未生成，请先执行 build 后再预览。</li>
+              <li v-if="loading" class="pfind-empty">{{ t.searchLoading }}</li>
+              <li v-else-if="query.trim() && !navFiltered.length && !articles.length" class="pfind-empty">{{ t.searchEmpty }}</li>
+              <li v-else-if="query.trim() && pagefindError" class="pfind-empty">{{ t.searchDevHint }}</li>
             </ul>
 
             <div class="pfind-version" title="当前构建版本标识，用于排查缓存导致的旧版问题">build {{ buildSha }}</div>

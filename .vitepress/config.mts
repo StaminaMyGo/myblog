@@ -72,6 +72,36 @@ function buildSidebar(): Record<string, DefaultTheme.SidebarItem[]> {
   return sidebar
 }
 
+/**
+ * 中英双语文案。
+ * VitePress 的 VPNavBarMenuLink / VPNavScreenMenuLink / VPDocFooter 都用 v-html 渲染 text，
+ * 所以可以直接写 HTML 双语 span；英文副本加 data-pagefind-ignore，避免被搜索索引重复收录。
+ * 显隐由 .vitepress/theme/style/i18n.css 按 <html data-lang> 控制（纯 CSS，首屏零闪烁）。
+ */
+function bi(zh: string, en: string): string {
+  return `<span class="lang-zh">${zh}</span><span class="lang-en" data-pagefind-ignore>${en}</span>`
+}
+
+const NAV: { zh: string; en: string; link: string }[] = [
+  { zh: '首页', en: 'Home', link: '/' },
+  { zh: '技术笔记', en: 'Tech', link: '/Tech/' },
+  { zh: '产品分析', en: 'Product', link: '/Product/' },
+  { zh: 'ACGN 评价', en: 'ACGN', link: '/ACGN/' },
+  { zh: '项目复盘', en: 'Projects', link: '/Project/' },
+  { zh: '成长思考', en: 'Growth', link: '/Growth/' },
+  { zh: '英语学习', en: 'English', link: '/English/' },
+  { zh: '关于我', en: 'About', link: '/Me/' },
+  { zh: '归档', en: 'Archive', link: '/archive/' },
+  { zh: '标签', en: 'Tags', link: '/tags/' },
+]
+
+/**
+ * 语言引导脚本（阻塞式）。
+ * 必须在 <head> 最前面同步执行：先按 localStorage 定好 data-lang，再让浏览器渲染首屏，
+ * 英文偏好用户因此不会看到任何中文闪现。默认 zh，不跟随浏览器语言。
+ */
+const LANG_BOOTSTRAP = `(function(){try{var l=localStorage.getItem('blog-lang');var v=(l==='en')?'en':'zh';document.documentElement.setAttribute('data-lang',v);document.documentElement.lang=(v==='zh'?'zh-CN':'en')}catch(e){document.documentElement.setAttribute('data-lang','zh')}})();`
+
 export default defineConfig({
   title: 'myblog',
   description: '个人博客：技术笔记 / 产品分析 / ACGN 评价 / 项目复盘 / 成长思考 / 英语学习',
@@ -92,6 +122,8 @@ export default defineConfig({
   },
 
   head: [
+    // 阻塞式：必须在样式与首屏渲染前定好 data-lang，否则英文偏好用户会闪现一帧中文
+    ['script', {}, LANG_BOOTSTRAP],
     ['link', { rel: 'icon', type: 'image/svg+xml', href: base + 'favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#0052d9' }],
     ['script', {}, `
@@ -102,24 +134,13 @@ export default defineConfig({
   themeConfig: {
     logo: { light: '/logo-light.svg', dark: '/logo.svg', alt: 'myblog' },
 
-    nav: [
-      { text: '首页', link: '/' },
-      { text: '技术笔记', link: '/Tech/' },
-      { text: '产品分析', link: '/Product/' },
-      { text: 'ACGN 评价', link: '/ACGN/' },
-      { text: '项目复盘', link: '/Project/' },
-      { text: '成长思考', link: '/Growth/' },
-      { text: '英语学习', link: '/English/' },
-      { text: '关于我', link: '/Me/' },
-      { text: '归档', link: '/archive/' },
-      { text: '标签', link: '/tags/' },
-    ],
+    nav: NAV.map((i) => ({ text: bi(i.zh, i.en), link: i.link })),
 
     sidebar: buildSidebar(),
 
     outline: { label: '文章目录', level: [2, 3] },
     lastUpdated: { text: '最后更新', formatOptions: { dateStyle: 'medium', timeStyle: 'short' } },
-    docFooter: { prev: '上一篇', next: '下一篇' },
+    docFooter: { prev: bi('上一篇', 'Previous'), next: bi('下一篇', 'Next') },
     returnToTopLabel: '回到顶部',
     darkModeSwitchLabel: '外观',
     sidebarMenuLabel: '菜单',

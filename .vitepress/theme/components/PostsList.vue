@@ -2,6 +2,9 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
+import { useLang } from '../composables/useLang'
+
+const { t } = useLang()
 
 interface Post {
   url: string
@@ -60,10 +63,12 @@ function readLocationQuery(): Record<string, string> {
 }
 
 function applyQuery(q: Record<string, string | number | undefined>) {
-  const n = parseInt(String(q.page ?? '1'), 10)
-  currentPage.value = Number.isNaN(n) || n < 1 ? 1 : n
   const y = String(q.year ?? '')
   activeYear.value = years.value.includes(y) ? y : ''
+  // 先定年份再算页码：切换年份后总页数会变小，直链 ?page=999 要收敛到末页，否则渲染空列表
+  const total = Math.max(1, Math.ceil(byYear.value.length / (props.pageSize || 20)))
+  const n = parseInt(String(q.page ?? '1'), 10)
+  currentPage.value = Number.isNaN(n) || n < 1 ? 1 : Math.min(n, total)
 }
 
 const currentPage = ref(1)
@@ -117,6 +122,100 @@ function pickYear(y: string) {
   setQuery({ year: y || undefined, page: undefined })
 }
 
+/* ---------- 循环滑动翻页 ----------
+ * 鼠标与触摸统一走 Pointer Events：一套代码，不会出现两套事件重复触发。
+ * 翻页仍复用 goPage → setQuery → replaceState，不碰路由，
+ * 因此与年份筛选、浏览器前进/后退、URL 分享行为完全一致。
+ */
+const swipeEl = ref<HTMLElement>()
+const dragging = ref(false)
+const dragX = ref(0)
+
+let startX = 0
+let startY = 0
+let axis: 'x' | 'y' | null = null
+let moved = 0
+let suppressClick = false
+
+/** 翻页阈值：最多 80px，窄屏按列表宽度的 18% 收敛 */
+function swipeThreshold(): number {
+  return Math.min(80, (swipeEl.value?.clientWidth ?? 480) * 0.18)
+}
+
+function onPointerDown(e: PointerEvent) {
+  if (totalPages.value < 2) return
+  if (e.pointerType === 'mouse' && e.button !== 0) return
+  startX = e.clientX
+  startY = e.clientY
+  axis = null
+  moved = 0
+  dragging.value = true
+  ;(e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId)
+}
+
+function onPointerMove(e: PointerEvent) {
+  if (!dragging.value) return
+  const dx = e.clientX - startX
+  const dy = e.clientY - startY
+  if (!axis) {
+    if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return
+    // 方向锁：只有横向意图才劫持手势，纵向照常滚动页面（移动端列表仍可上下滑）
+    axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'
+    if (axis === 'x') window.getSelection()?.removeAllRanges()
+  }
+  if (axis !== 'x') return
+  moved = Math.max(moved, Math.abs(dx))
+  dragX.value = dx * 0.35 // 阻尼跟手
+}
+
+function onPointerUp(e: PointerEvent) {
+  if (!dragging.value) return
+  dragging.value = false
+  if (axis === 'x') {
+    const dx = e.clientX - startX
+    if (Math.abs(dx) > swipeThreshold()) {
+      goPageCyclic(currentPage.value + (dx < 0 ? 1 : -1))
+    }
+  }
+  dragX.value = 0
+  // 拖拽过就抑制紧随其后的 click，否则会误开文章链接
+  if (moved > 8) {
+    suppressClick = true
+    setTimeout(() => {
+      suppressClick = false
+    }, 300)
+  }
+}
+
+/** capture 阶段拦下拖拽尾随的 click */
+function onClickCapture(e: MouseEvent) {
+  if (!suppressClick) return
+  suppressClick = false
+  e.preventDefault()
+  e.stopPropagation()
+}
+
+/** 循环翻页：末页再往后回到第 1 页，第 1 页往前到末页 */
+function goPageCyclic(n: number) {
+  const total = totalPages.value
+  goPage(((n - 1) % total + total) % total + 1)
+}
+
+/** 页码指示器：页数过多时只渲染当前页附近的窗口，避免几十个圆点换行 */
+const dotPages = computed<(number | '...')[]>(() => {
+  const total = totalPages.value
+  if (total <= 12) return Array.from({ length: total }, (_, i) => i + 1)
+  const c = currentPage.value
+  const out: (number | '...')[] = [1]
+  const start = Math.max(2, c - 2)
+  const end = Math.min(total - 1, c + 2)
+  if (start > 2) out.push('...')
+  for (let i = start; i <= end; i++) out.push(i)
+  if (end < total - 1) out.push('...')
+  out.push(total)
+  return out
+})
+
 /* ---------- 分组模式（保持原有行为） ---------- */
 const groups = computed(() => {
   const map = new Map<string, Post[]>()
@@ -157,7 +256,7 @@ function tagLink(t: string): string {
               <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
               <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
               <div v-if="p.tags.length" class="mb-tags">
-                <a v-for="t in p.tags" :key="t" class="mb-tag" :href="tagLink(t)"># {{ t }}</a>
+                <a v-for="tag in p.tags" :key="tag" class="mb-tag" :href="tagLink(tag)"># {{ tag }}</a>
               </div>
             </div>
           </li>
@@ -176,7 +275,7 @@ function tagLink(t: string): string {
               class="mb-chip"
               :class="{ active: !activeYear }"
               @click="pickYear('')"
-            >全部 · {{ filtered.length }} 篇</button>
+            >{{ t.archiveAll(filtered.length) }}</button>
             <button
               v-for="y in years"
               :key="y"
@@ -187,34 +286,64 @@ function tagLink(t: string): string {
             >{{ y }}</button>
           </div>
 
-          <ul class="mb-posts">
-            <li v-for="p in paged" :key="p.url" class="mb-post">
-              <span class="mb-post-date">{{ fmtDate(p.date) }}</span>
-              <div class="mb-post-main">
-                <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
-                <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
-                <div v-if="p.tags.length" class="mb-tags">
-                  <a v-for="t in p.tags" :key="t" class="mb-tag" :href="tagLink(t)"># {{ t }}</a>
+          <!-- 滑动区：鼠标与触摸统一走 Pointer Events -->
+          <div
+            ref="swipeEl"
+            class="mb-swipe"
+            :class="{ dragging }"
+            @pointerdown="onPointerDown"
+            @pointermove="onPointerMove"
+            @pointerup="onPointerUp"
+            @pointercancel="onPointerUp"
+            @click.capture="onClickCapture"
+          >
+            <ul class="mb-posts" :style="{ transform: `translateX(${dragX}px)` }">
+              <li v-for="p in paged" :key="p.url" class="mb-post">
+                <span class="mb-post-date">{{ fmtDate(p.date) }}</span>
+                <div class="mb-post-main">
+                  <a class="mb-post-title" :href="withBase(p.url)">{{ p.title }}</a>
+                  <p v-if="p.excerpt" class="mb-post-excerpt">{{ p.excerpt }}</p>
+                  <div v-if="p.tags.length" class="mb-tags">
+                    <a v-for="tag in p.tags" :key="tag" class="mb-tag" :href="tagLink(tag)"># {{ tag }}</a>
+                  </div>
                 </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
 
-          <!-- 分页器 -->
-          <nav v-if="totalPages > 1" class="mb-pager" aria-label="分页">
-            <button type="button" class="mb-pager-btn" :disabled="currentPage <= 1" @click="goPage(currentPage - 1)">
-              上一页
-            </button>
-        <span class="mb-pager-info">第 {{ Math.min(currentPage, totalPages) }} / {{ totalPages }} 页</span>
-        <button
-          type="button"
-          class="mb-pager-btn"
-          :disabled="currentPage >= totalPages"
-          @click="goPage(currentPage + 1)"
-        >
-          下一页
-        </button>
-      </nav>
+            <p v-if="!paged.length" class="mb-empty">{{ t.archiveEmpty }}</p>
+
+            <!-- 分页器（保留：鼠标与键盘的可达性，滑动是叠加能力） -->
+            <nav v-if="totalPages > 1" class="mb-pager" :aria-label="t.pagerAria">
+              <button type="button" class="mb-pager-btn" :disabled="currentPage <= 1" @click="goPage(currentPage - 1)">
+                {{ t.pagerPrev }}
+              </button>
+              <span class="mb-pager-info">{{ t.pagerInfo(Math.min(currentPage, totalPages), totalPages) }}</span>
+              <button
+                type="button"
+                class="mb-pager-btn"
+                :disabled="currentPage >= totalPages"
+                @click="goPage(currentPage + 1)"
+              >
+                {{ t.pagerNext }}
+              </button>
+            </nav>
+
+            <!-- 页码指示器：可点击直达，与滑动互补 -->
+            <div v-if="totalPages > 1" class="mb-dots">
+              <template v-for="(n, i) in dotPages" :key="`${n}-${i}`">
+                <span v-if="n === '...'" class="mb-dots-gap">···</span>
+                <button
+                  v-else
+                  type="button"
+                  class="mb-dot"
+                  :class="{ active: n === currentPage }"
+                  :aria-label="t.pagerInfo(n, totalPages)"
+                  :aria-current="n === currentPage ? 'true' : undefined"
+                  @click="goPage(n)"
+                />
+              </template>
+            </div>
+          </div>
         </div>
       </ClientOnly>
     </template>
@@ -287,5 +416,67 @@ function tagLink(t: string): string {
   font-size: 13px;
   font-family: var(--mb-mono, monospace);
   color: var(--mb-ui2, #999);
+}
+
+/* ---------- 循环滑动翻页 ---------- */
+.mb-swipe {
+  /* 关键：横向手势交给脚本，纵向滚动仍归浏览器，否则移动端列表滑不动 */
+  touch-action: pan-y;
+}
+
+.mb-swipe.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.mb-swipe .mb-posts {
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+/* 拖拽过程中取消过渡，保证跟手；松手后恢复过渡做回弹 */
+.mb-swipe.dragging .mb-posts {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mb-swipe .mb-posts {
+    transition: none;
+  }
+}
+
+/* ---------- 页码指示器 ---------- */
+.mb-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.mb-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--mb-ui3, #e0e0e0);
+  cursor: pointer;
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.mb-dot:hover {
+  background: var(--mb-accent, #0052d9);
+}
+
+.mb-dot.active {
+  width: 24px;
+  background: var(--mb-accent, #0052d9);
+}
+
+.mb-dots-gap {
+  font-size: 12px;
+  color: var(--mb-ui2, #999);
+  user-select: none;
 }
 </style>

@@ -10,6 +10,7 @@ import AboutSceneDeck from './components/AboutSceneDeck.vue'
 import './style/vars.css'
 import './style/minimal.css'
 import './style/about.css'
+import './style/i18n.css'
 
 /* SPA URL query 同步桥：
  * VitePress 1.6.4 的 useRoute() 返回对象没有 query 属性（route = reactive({ path, component, data })），

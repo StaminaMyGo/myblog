@@ -1,0 +1,19 @@
+/* =========================================================
+   myblog · i18n.css
+   界面文案的中英显隐规则。
+
+   data-lang 由 config.mts 注入的阻塞式内联脚本在首屏渲染前写到 <html> 上，
+   所以这里是**纯 CSS 切换**：SSR 输出的 HTML 中两份文案都在，
+   既不依赖 Vue 挂载（首屏零闪烁），也不会产生 hydration mismatch。
+
+   约定：英文副本一律加 data-pagefind-ignore，
+   否则同一个词条会被 Pagefind 索引两次。
+   ========================================================= */
+
+html:not([data-lang='en']) .lang-en {
+  display: none !important;
+}
+
+html[data-lang='en'] .lang-zh {
+  display: none !important;
+}

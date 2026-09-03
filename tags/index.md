@@ -4,8 +4,8 @@ description: 按标签浏览全部文章
 aside: false
 ---
 
-# 标签
+# <span class="lang-zh">标签</span><span class="lang-en" data-pagefind-ignore>Tags</span>
 
-点击标签查看该主题下的全部文章。
+<span class="lang-zh">点击标签查看该主题下的全部文章。</span><span class="lang-en" data-pagefind-ignore>Click a tag to see all posts under that topic.</span>
 
 <TagsPage />

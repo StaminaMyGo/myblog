@@ -2,6 +2,9 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { withBase } from 'vitepress'
 import { data as posts } from '../../posts.data'
+import { useLang } from '../composables/useLang'
+
+const { t } = useLang()
 
 interface Post {
   url: string
@@ -81,13 +84,13 @@ function clearSel() {
         <a v-for="[t, c] in tagCounts" :key="t" class="tags-chip" :class="{ active: t === selected }" :href="tagLink(t)">
           {{ t }} <span class="tags-count">{{ c }}</span>
         </a>
-        <button v-if="selected" type="button" class="tags-clear" @click="clearSel">✕ 清除筛选</button>
+        <button v-if="selected" type="button" class="tags-clear" @click="clearSel">{{ t.tagsClear }}</button>
       </div>
 
       <div v-if="selected" ref="listAnchor" class="tags-list">
         <PostsList :tag="selected" :page-size="50" />
       </div>
-      <p v-else class="tags-hint">共 {{ tagCounts.length }} 个标签 · 点击标签查看相关文章</p>
+      <p v-else class="tags-hint">{{ t.tagsHint(tagCounts.length) }}</p>
     </div>
   </ClientOnly>
 </template>
