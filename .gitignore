@@ -63,3 +63,11 @@ bug/
 
 # 遗留组件（已从主题注册移除，本机文件被占用无法删除）
 .vitepress/theme/components/TerminalHome.vue
+
+# 工具 / 会话缓存（不影响站点内容）
+.omo/
+.playwright-mcp/
+.codegraph/
+
+# PowerShell 误用 `-Force` 产生的空目录残留
+-Force/
