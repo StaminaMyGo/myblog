@@ -21,7 +21,11 @@ const tagCounts = computed<[string, number][]>(() => {
   for (const p of allPosts) {
     for (const t of p.tags) map.set(t, (map.get(t) || 0) + 1)
   }
-  return Array.from(map.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  // String() 兜底：若某标签是 YAML 误解析出的数字（如 - 408），localeCompare 会抛错，
+  // 这里强制转字符串，保证排序永不崩溃。
+  return Array.from(map.entries())
+    .map(([t, c]) => [String(t), c] as [string, number])
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
 })
 
 /**

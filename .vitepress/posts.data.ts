@@ -31,7 +31,8 @@ export default createContentLoader(
           category: (url.split('/').filter(Boolean)[0] || '').toLowerCase(),
           title: (frontmatter.title as string) || url,
           date: frontmatter.date ? new Date(String(frontmatter.date)).toISOString() : '',
-          tags: (frontmatter.tags as string[]) || [],
+          // YAML 会把 `- 408` 这类裸数字解析成 number，务必转成字符串，否则 TagsPage 排序 localeCompare 会崩
+          tags: ((frontmatter.tags as (string | number)[]) || []).map((t) => String(t)),
           series: (frontmatter.series as string) || '',
           excerpt: (frontmatter.description as string) || (frontmatter.excerpt as string) || '',
         }))

@@ -33,7 +33,13 @@ function parseFrontmatter(content) {
     if (inTags) {
       if (line.startsWith('- ')) {
         data.tags = data.tags || []
-        data.tags.push(line.slice(2).trim())
+        const val = line.slice(2).trim()
+        data.tags.push(val)
+        // YAML 会把 `- 408` 这类未加引号的裸数字解析成 number，TagsPage 排序会崩，必须报错提示
+        if (!/^['"]/.test(val) && /^-?\d+(\.\d+)?$/.test(val)) {
+          data.__nonStringTags = data.__nonStringTags || []
+          data.__nonStringTags.push(val)
+        }
       } else {
         inTags = false
       }
@@ -93,6 +99,9 @@ for (const cat of CATS) {
     }
     if (!Array.isArray(fm.tags) || fm.tags.length === 0) {
       warnings.push(`缺少 tags：${rel}`)
+    }
+    if (fm.__nonStringTags?.length) {
+      errors.push(`tags 含未加引号的裸数字（YAML 会解析成 number，导致标签页崩溃），请改成 "408" 形式：${rel} → ${JSON.stringify(fm.__nonStringTags)}`)
     }
   }
 }
